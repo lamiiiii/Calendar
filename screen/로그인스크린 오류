@@ -1,0 +1,100 @@
+
+
+const LoginScreen = () => {
+/*
+    const [userId, setUserId] = useState('');
+    const [UserPw, setUserPw] = useState('');
+
+    const doLogin = () => {
+        const requestData = {
+            userId: id,
+            userPw: password,
+        };
+    }
+
+    const apiUrl = 'http://43.200.179.53:3000/login';
+
+    // Axios를 이용하여 POST 요청 보내기
+    axios.post(apiUrl, requestData)
+*/
+// 클래스 컴포넌트를 사용할 때, 함수형 컴포넌트와는 다르게 state의 타입 미리 정의하고 컴포넌트 선언 시 해당 타입 지칭
+/*
+    // state는 입력한 텍스트를 저장하고 보여줄 변수들 저장
+    // text는 화면에 보여줄 변수, inputText는 입력받은 텍스트 저장하는 변수
+    state = {
+        text: '',
+        inputText: ''
+    }
+*/
+
+    // submitButton은 inputText의 값을 text에 전달해주는 역할
+    LoginButton = () => {
+        this.setState({text: this.state.inputText});
+    }
+
+    SignUpButton = () => {
+        this.setState({text: this.state.inputText});
+    }
+
+    // render(){
+        return (
+            <View style={styles.container}>
+                <Image style={styles.Logo} source={require('../assets/images/Logo.png')}/>
+                    <TextInput
+                        title='아이디'
+                        style={styles.TextInput}
+                        //onChangeText={(text) => setId(text)}
+                        // onChangeText는?
+                        placeholder='ID'
+                    />
+                    <TextInput
+                        title='패스워드'
+                        style={styles.TextInput}
+                        //onChangeText={(text) => setPassword(text)}
+                        // onChangeText는?
+                        placeholder='PW'
+                    />
+                    <Text style = {styles.showText}>{this.state.text}</Text>
+
+                    <CustomButton 
+                        title = '로그인'
+                        buttonColor = '#85BEFE'
+                        onPress={() => alert('로그인 버튼')}/>
+
+                    <CustomButton
+                        title='회원가입'
+                        buttonColor = '#719DDF'
+                        onPress={() => alert('회원가입 버튼')}/>
+                        
+            </View>
+        )
+    }
+//}
+
+
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    Logo: {
+        height: 150,
+        width: 150, 
+        justifyContent: 'center',
+    },
+    TextInput: {
+        marginTop: 10,
+        paddingLeft: 20,
+        height: 45,
+        width: 290,
+        backgroundColor: '#F0F0F0',
+        fontSize: 17,
+    },
+
+})
+
+export default LoginScreen;

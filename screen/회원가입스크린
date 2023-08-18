@@ -1,0 +1,260 @@
+// 지연이 회원가입
+
+import React from 'react';
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    Image,
+    Alert,
+} from 'react-native';
+import { useState } from "react";
+import axios from 'axios';
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+
+let Checklist={
+    pwCheck:false,
+    idCheck:false,
+    nicknameCheck:false,
+}
+ 
+
+export default function LoginScreen() {
+
+    
+    const [id, setId] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordChcek, setPasswordCheck] = useState("");
+    const [nickname, setNickname] = useState("");
+
+    const apiUrl ='http://43.200.179.53:3000/create-user';
+
+    const apiUrlIdCheck = 'http://43.200.179.53:3000/check-id';
+    const apiUrlNicknameCheck = 'http://43.200.179.53:3000/check-nickname';
+
+    const doJoin=()=>{
+        console.log("확인요", Checklist.idCheck);
+        const requestData = {
+            userId: id,
+            userPw: password,
+            nickname: nickname,
+          };
+
+         // API URL 설정
+        // Axios를 이용하여 POST 요청 보내기
+        if(Checklist.pwCheck==true && Checklist.idCheck==true && Checklist.nicknameCheck ==true){
+            axios.post(apiUrl, requestData)
+            .then(response => {
+                // 요청이 성공한 경우 응답 데이터 처리
+                console.log('전송 성공:', response.data);
+                Alert.alert(                     
+                response.data["message"]);
+            })
+            .catch(error => {
+                // 요청이 실패한 경우 에러 처리
+                console.error('전송 실패:', error);
+
+            });
+        }
+        else{
+            if(Checklist.idCheck!=true){
+                console.log(Checklist.idCheck);
+                focusOutId()
+            }
+            if(Checklist.nicknameCheck!=true){
+                focusOutNikname();
+            }
+            if(passwordChcek==""){
+                Alert.alert("비밀번호 확인을 해주세요");
+            }
+            else if(password !== passwordChcek){
+                Alert.alert("비밀번호 값이 다릅니다");
+                Checklist.pwCheck=false;
+            }
+            else if(password === passwordChcek){
+                Checklist.pwCheck=true;
+            }
+            console.log(Checklist.idCheck, Checklist.pwCheck, Checklist.nicknameCheck);
+        }
+    }
+    const focusOutNikname=()=>{
+        const requestData = {
+            nickname: nickname
+        }
+
+        console.log("out");
+
+        axios.post(apiUrlNicknameCheck, requestData)
+        .then(response => {
+            console.log('전송 성공:',response.data)
+            if(response.data["property"]===200)
+                Checklist.nicknameCheck=true;
+        })
+        .catch(error => {
+            // 요청이 실패한 경우 에러 처리
+            console.error('전송 실패:', error);
+
+        });
+    }
+    const idPost=(checkId)=>{
+        const requestData = {
+            userId: id
+        }
+        axios.post(apiUrlIdCheck, requestData)
+        .then(response => {
+            console.log('전송 성공:',response.data);
+            if(response.data["property"]==200 && Checklist.idCheck!=true){
+                checkId=true;
+                console.log(checkId);
+            }
+        })
+        .catch(error => {
+            // 요청이 실패한 경우 에러 처리
+            console.error('전송 실패:', error);
+        });
+        return checkId
+    }
+    const focusOutId=()=>{
+        let checkId = false
+        idPost(checkId);
+        console.log("focusOutId");
+        
+        if(checkId==true){
+            Checklist.idCheck=true;
+        }
+    }
+
+    const focusOutPw=()=>{
+
+        if(password !== passwordChcek){
+            Alert.alert("비밀번호 값이 다릅니다");
+            Checklist.pwCheck=false;
+        }
+        else{
+            Checklist.pwCheck=true;
+        }
+    }
+
+    // render(){
+        return (
+            <View style={styles.container}>
+                <View style={styles.titleArea}>
+                <Image
+                    style={styles.logoPhoto}
+                    source={require('../assets/images/logo.png')}
+                />
+                </View>
+                <View style={styles.formArea}>
+                    <TextInput 
+                        style={styles.textForm} 
+                        placeholder={"ID"}
+                        value={id}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        onChangeText={(text) => setId(text)}
+                        onBlur={focusOutId} /> 
+                    <TextInput 
+                        style={styles.textForm} 
+                        placeholder={"PW"}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        secureTextEntry={true}
+                        value={password}
+                        onChangeText={(text)=> setPassword(text)}/>
+                    <TextInput 
+                        style={styles.textForm} 
+                        placeholder={"PW Check"}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        secureTextEntry={true}
+                        value={passwordChcek}
+                        onChangeText={(text)=> setPasswordCheck(text)} 
+                        onBlur ={focusOutPw}/>
+                    <TextInput 
+                        style={styles.textForm} 
+                        placeholder={"닉네임"}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        value={nickname}
+                        onChangeText={(text)=> setNickname(text)} 
+                        onChange={this.nicknameChaneg}
+                        onBlur={focusOutNikname}/>
+
+                </View>
+                <View style={styles.TailArea}>
+                  <View style={styles.buttonArea}>
+                      <TouchableOpacity 
+                          style={styles.buttonJoin}
+                          onPress={doJoin}>
+                          <Text style={styles.buttonTitle}>회원가입</Text>
+                      </TouchableOpacity>
+                  </View>
+                </View>
+            </View>
+        );
+    //}
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white',
+        paddingLeft: wp('10%'),
+        paddingRight: wp('10%'),
+        justifyContent: 'center',
+    },
+    titleArea: {
+        // width: '100%',
+        // padding: wp('10%'),
+        flex: 1,
+        alignItems: 'center',
+        //backgroundColor : "blue",
+        justifyContent:'flex-end',
+        
+    },
+    title: {
+        fontSize: wp('10%'),
+    },
+    formArea: {
+        width: '100%',
+        paddingBottom: wp('15%'),
+        flex: 0.5,
+        //backgroundColor: "green"
+    },
+    textForm: {
+        borderWidth: 0.5,
+        borderColor: '#888',
+        width: '100%',
+        height: hp('5%'),
+        paddingLeft: 5,
+        paddingRight: 5,
+        marginBottom: 10,
+    },
+    buttonArea: {
+        width: '100%',
+        height: hp('7%'),
+    },
+    buttonJoin: {
+        backgroundColor: "#90b2d1",
+        width: "100%",
+        height: "80%",
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    buttonTitle: {
+        color: 'white',
+    },
+    TailArea:{
+      flex:0.9,
+      // backgroundColor:"red",
+    },
+    logoPhoto: {
+        width: 200,
+        height: 150, 
+        marginBottom: 20,
+
+    }
+})
