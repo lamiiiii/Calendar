@@ -17,7 +17,7 @@ const NoticeScreen = () => {
     const navigation = useNavigation();
 
     // API URL 설정
-    const apiUrl = 'http://43.200.179.53:3000/announcement';
+    const apiUrl = 'http://43.201.9.115:3000/announcement';
 
 /*   const [notices, setNotices] = useState([]);
 

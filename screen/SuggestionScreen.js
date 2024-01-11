@@ -22,7 +22,7 @@ const SuggestionScreen = () => {
 
     // 건의사항 전송 함수
     const submitSuggestion = () => {
-        const apiUrl = 'http://43.200.179.53:3000/suggest'; // 건의사항 API URL
+        const apiUrl = 'http://43.201.9.115:3000/suggest'; // 건의사항 API URL
 
         const suggestionData = {    // 보낼 데이터
             "suggestion": suggestion
@@ -33,6 +33,8 @@ const SuggestionScreen = () => {
         .then(response => {
             console.log("건의사항 전송 성공: ", response.data);
             console.log("건의사항 내용: ", suggestion);
+            Alert.alert("건의사항이 전송되었습니다.");
+            navigation.navigate('MyPage');
         })
         .catch(error => {
             console.error("에러: ", error);

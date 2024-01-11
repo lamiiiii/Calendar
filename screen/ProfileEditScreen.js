@@ -34,7 +34,7 @@ const ProfileEditScreen = () => {
 
     // 닉네임 반환 함수
     const returnNickname = () => {
-        const apiUrlN = 'http://43.200.179.53:3000/my-info';  // 닉네임 반환 API URL
+        const apiUrlN = 'http://43.201.9.115:3000/my-info';  // 닉네임 반환 API URL
         const requestData = {
             userId: id,
         };
@@ -132,6 +132,7 @@ const ProfileEditScreen = () => {
                        source={require('../assets/images/MyProfile.png')}
                     /></Pressable>
             </View>
+            <Text style = {styles.id}>ID: {id}</Text>
             <View style={styles.nicknameEdit}>
                 <TextInput      // 닉네임 입력칸
                     title='닉네임'
@@ -172,7 +173,10 @@ const styles = StyleSheet.create({
     profileImage: {     // 프로필 이미지 크기
         width: 150,
         height: 150,
-        marginBottom: 30,
+    },
+    id: {
+        color: '#404040',
+        marginBottom: 20, 
     },
     nicknameEdit: {     // 닉네임 변경 뷰
 

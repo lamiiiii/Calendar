@@ -36,7 +36,7 @@ const MyPageScreen = () => {
 // 프로필 사진 반환 함수
     const returnProfile = async() => {
         // const [profileImage, setProfileImage] = useState("");   // 프로필 이미지 반환
-        const apiUrlP = 'http://43.200.179.53:3000/my-photo';   // 프로필 사진 반환 API URL
+        const apiUrlP = 'http://43.201.9.115:3000/my-photo';   // 프로필 사진 반환 API URL
         // Axios를 이용하여 POST 요청 보내기
         try{
             const response = await axios.post(apiUrlP, {
@@ -54,7 +54,7 @@ const MyPageScreen = () => {
 
 // 닉네임 반환 함수
     const returnNickname = () => {
-        const apiUrlN = 'http://43.200.179.53:3000/my-info';  // 닉네임 반환 API URL
+        const apiUrlN = 'http://43.201.9.115:3000/my-info';  // 닉네임 반환 API URL
         const requestData = {
             userId: id,
         };
@@ -66,7 +66,7 @@ const MyPageScreen = () => {
             }
             // 요청이 실패한 경우 메세지 출력
             else{
-                setNickname("닉네임 반환");
+                setNickname("");
             }
         })
         .catch(error => {

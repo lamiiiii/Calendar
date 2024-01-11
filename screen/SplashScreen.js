@@ -8,8 +8,10 @@ import {View,
     } from 'react-native' // 시간이 지나면 넘어가게 할 화면으로 아마 버튼 없앨 예정
 import React from 'react'
 import { useNavigation } from '@react-navigation/native'
+import DateTimePicker from "react-native-modal-datetime-picker";
 
 const SplashScreen = () => {
+    
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
@@ -24,6 +26,8 @@ const SplashScreen = () => {
             <Button title='Go to MainScreen' onPress={() => navigation.navigate('Main')}/>
             <Text></Text>
             <Button title='Go to SignUpScreen' onPress={() => navigation.navigate('SignUp')}/>
+            <Text></Text>
+            <Button title='Go to DayScheduleScreen' onPress={() => navigation.navigate('DaySchedule')}/>
             {/** onPress는 버튼을 누르는 행위의 함수
              *   화면 전환을 위해 useNavigation() 객체 받아서 사용
              *   이를 받은 객체를 Navigation이라 만들었고, 이 객체의 navigate() 함수에 Stack으로 정한 이름 넣어줌

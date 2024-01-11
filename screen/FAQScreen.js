@@ -18,7 +18,7 @@ const FAQScreen = () => {
     const navigation = useNavigation();
 
     // API URL 설정
-    const apiUrl = 'http://43.200.179.53:3000/question'
+    const apiUrl = 'http://43.201.9.115:3000/question'
 
     return (
         <View style={styles.container}>

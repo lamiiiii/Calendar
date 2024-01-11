@@ -1,26 +1,38 @@
 // MainScreen.js
 // 메인 화면 - 캘린더
 
-import {View, 
+import { View,
         Text, 
         Button,
         StyleSheet,
         Image,
+        Body,
         TouchableOpacity,
     } from 'react-native' 
 import React, { Component, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native'
-import {Calendar} from "react-native-calendars";
+// import {Calendar} from "react-native-calendars";
+import Calendar from "./CalendarPage/Calendar";
+import { Header } from 'react-native/Libraries/NewAppScreen';
 
 const MainScreen = () => {
+
     const navigation = useNavigation();
+
     return (
         <View style={styles.container}>
             <View style={styles.titleArea}>
-                <Text style={styles.titleText}>일정</Text>
+                <Text style={styles.titleText}>Calendar</Text>
             </View>
-
-            <Calendar style={styles.calendar}/>
+            <View style={styles.addButton}>
+            <TouchableOpacity 
+                onPress={() => navigation.navigate('DaySchedule')}>
+                    <Image source={require('../assets/icons/AddButton.png')} style={styles.addIconImage}/>
+            </TouchableOpacity>
+            </View>
+            <View style={styles.calendarContainer}>
+                <Calendar style={styles.calendar}/>
+            </View>
 
 {/** 아이콘 버튼 4개 */}           
             <View style={styles.iconButton}>
@@ -38,7 +50,7 @@ const MainScreen = () => {
                         <Image style={styles.IconImage} 
                                source={require('../assets/icons/Todo_icon.png')} />
                 </TouchableOpacity>
-                {/** To-do 리스트 페이지 이동 버튼 */}
+                {/** 메모 페이지 이동 버튼 */}
                 <TouchableOpacity 
                     style={styles.buttonIcon}
                     onPress={() => navigation.navigate('Splash')}>
@@ -58,13 +70,23 @@ const MainScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    calendar:{
+    edit: {
+        fontSize: 12,
+        marginRight: 20,
         borderWidth: 1,
-        borderColor: '#b0b0b0',
-        borderRadius: 12,
-        marginLeft: 30,
-        marginRight: 30,
-        height: 400,
+        borderRadius: 5,
+        marginLeft: 300,
+        opacity: 0.7,
+    },
+    addButton: {
+        alignItems: "flex-end",
+        marginRight: 20,
+    },
+    addIconImage:{
+        height: 25,
+        width: 25,
+    },
+    calendarContainer:{
     },
     container: {
         flex: 1,
@@ -78,6 +100,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#404040',
         margin: 30,
+        marginBottom: 5,
+    },
+    calendar: {
+
     },
     buttonIcon: {
 
@@ -85,7 +111,7 @@ const styles = StyleSheet.create({
     iconButton: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 110,
+        marginTop: 30,
     },
     IconImage: {
         width: 55,

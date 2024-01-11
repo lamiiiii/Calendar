@@ -3,16 +3,16 @@
 
 import React from 'react';
 import {
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    StyleSheet,
-    Image,
-    Alert,
-    Keyboard,
-    TouchableWithoutFeedback,
-} from 'react-native';
+        View,
+        Text,
+        TextInput,
+        TouchableOpacity,
+        StyleSheet,
+        Image,
+        Alert,
+        Keyboard,
+        TouchableWithoutFeedback,
+    } from 'react-native';
 import { Component, useState, useRef, useAsync } from "react";
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
@@ -42,10 +42,10 @@ export default function SignUpScreen() {
     const [passwordCheck, setPasswordCheck] = useState("");
     const [nicknameValue, setNickname] = useState("");
 
-    const apiUrl ='http://43.200.179.53:3000/create-user';
+    const apiUrl ='http://43.201.9.115:3000/create-user';
 
-    const apiUrlIdCheck = 'http://43.200.179.53:3000/check-id';
-    const apiUrlNicknameCheck = 'http://43.200.179.53:3000/check-nickname';
+    const apiUrlIdCheck = 'http://43.201.9.115:3000/check-id';
+    const apiUrlNicknameCheck = 'http://43.201.9.115:3000/check-nickname';
 
     const [isLoading, setIsLoading] = useState(false); // 추가: 로딩 스피너를 위한 상태 추가
 
@@ -102,6 +102,9 @@ export default function SignUpScreen() {
                     Alert.alert(response.data["message"], "=^._.^= ∫");
                     navigation.navigate('Login');
                 }
+                else if(response.data["property"]==400){
+                    Alert.alert(response.data["message"], "입력해주시길 바랍니다.");
+                }
             } catch (error) {
                 console.error('전송 실패:', error);
             } finally {
@@ -148,6 +151,10 @@ export default function SignUpScreen() {
                         Alert.alert("이미 사용 중인 닉네임입니다");
                         Checklist.nicknameCheck=false;
                     }
+                    if(response.data["property"]==400){
+                        Alert.alert(response.data["message"]);
+                        Checklist.nicknameCheck=false;
+                    }
                 })
             .catch(error => {
                 // 요청이 실패한 경우 에러 처리
@@ -180,7 +187,11 @@ export default function SignUpScreen() {
             if(response.data["property"]==401){
                 Alert.alert("이미 사용 중인 아이디입니다");
                 Checklist.idCheck=false;
-            }   
+            }
+            if(response.data["property"]==400){
+                Alert.alert(response.data["message"]);
+                Checklist.idCheck=false;
+            }
         })
         .catch(error => {
             // 요청이 실패한 경우 에러 처리
@@ -283,6 +294,11 @@ export default function SignUpScreen() {
 
     // 회원가입 완료 함수
     const joinClick = async () => {
+        if(passwordValue==""){
+            Alert.alert("입력되지 않은 값이 존재합니다", "입력해주시길 바랍니다.");
+            console.log("박정재 먹고자고");
+            Checklist.pwCheck = false;
+    }
         await focusOutNickname();
         await focusOutId();
         await focusOutPw();

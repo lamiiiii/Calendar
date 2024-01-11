@@ -32,7 +32,7 @@ const CheckPasswordScreen = () => {
 
 // 회원 탈퇴 기능 함수
     const deleteAccount = async () => {
-        const apiUrlD = 'http://43.200.179.53:3000/delete-user';
+        const apiUrlD = 'http://43.201.9.115:3000/delete-user';
         
         try{
             // 회원 탈퇴 요청 보내기
