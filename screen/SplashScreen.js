@@ -1,5 +1,5 @@
 // SplashScreen.js
-// 가장 첫 화면으로 보여지는 화면
+// 가장 첫 화면으로 보여지는 화면 (삭제 예정)
 
 import {View,
         Text, 

@@ -69,6 +69,8 @@ function Calendar() {
 
 export default Calendar;
 
+
+
 // 일요일 빨간색 표시 구분
 function isSunday(year, month, date) {
   const dayOfWeek = new Date(year, month - 1, date).getDay(); // 0 (일요일)부터 6 (토요일)까지의 값을 반환
@@ -106,6 +108,7 @@ function Header(props) {
                 <Ionicons name="chevron-back" size={24} color="black"/>
             </Pressable>
         <View style={{ flexDirection: "row" }}>
+        
         <Text>{props.year}년 {props.month}월 </Text>
         </View>
             <Pressable
@@ -126,11 +129,69 @@ function Header(props) {
       );
     }
 
-//Year,Monty,date
+
+//Year,Month,date
 function Body(props) {
+  // 일정표시
+  const [id, setId] = useState('');
+  const [ScheduleId, setScheduleId] = useState('');
+  const [ScheduleName, setScheduleName] = useState('');
+  const [SchedulesList, setSchedulesList] = useState('');
+  const [LabelColor, setLabelColor] = useState('');
+  const [StartAmPm, setStartAmPm] = useState('');
+  const [StartTime, setStartTime] = useState('');
+  const [EndYear, setEndYear] = useState('');
+  const [EndMonth, setEndMonth] = useState('');
+  const [EndDay, setEndDay] = useState('');
+  const [EndAmPm, setEndAmPm] = useState('');
+  const [EndTime, setEndTime] = useState('');
 
-  const [mark, setMark] = useState([]);
+      // AsyncStorage로부터 userId 정보 가져오기
+      useEffect(()=>{
+        AsyncStorage.getItem('userId').then(userId => {
+            const parsedUserId = JSON.parse(userId); // 따옴표를 제거하기 위해 JSON 파싱
+            setId(parsedUserId);
+       });
+    }, []);
 
+  const returnSchedule = () => {
+
+    //------------------------------------------------------------------
+    // 보낼 데이터
+    const requestData = {        
+        userId: id,
+        year: year,        
+        month: month,        
+        day: date,
+    };
+    const apiUrlS = 'http://43.201.9.115:3000/day-schedule';
+    axios.post(apiUrlS, requestData)
+    .then(response => {
+        const scheduleList = response.data;
+        setScheduleId(scheduleList.data[0]["scheduleId"]);
+        setScheduleName(scheduleList.data[0]["scheduleName"]);
+        setLabelColor(scheduleList.data[0]["labelColor"]);
+        setYear(scheduleList.data[0]["year"]);
+        setMonth(scheduleList.data[0]["month"]);
+        setDay(scheduleList.data[0]["day"]);
+        setStartAmPm(scheduleList.data[0]["startAmPm"]);
+        setStartTime(scheduleList.data[0]["startTime"]);
+        setEndYear(scheduleList.data[0]["endYear"]);
+        setEndMonth(scheduleList.data[0]["endMonth"]);
+        setEndDay(scheduleList.data[0]["endDay"]);
+        setEndAmPm(scheduleList.data[0]["endAmPm"]);
+        setEndTime(scheduleList.data[0]["endTime"]);
+    })
+    .catch(error => {
+        console.error(error);
+    })
+};
+
+returnSchedule();
+
+
+//------------------------------------------------------------------
+  
   const [totalDays, setTotalDays] = useState({});
   const [pressedDate, setPressedDate] = useState({
     state: "",
@@ -240,7 +301,7 @@ return (
                       ],
                     ]}
                   >
-                    {day}
+                    {day}{ScheduleName}
                   </Text>
                 </Pressable>
               </View>
@@ -300,8 +361,8 @@ const S = StyleSheet.create({
     height: 22,
     color: "#404040",
     backgroundColor: "rgba(133, 190, 242, 0.5)",
-    textAlign: 'center',
     borderRadius: 20,
+    textAlign: 'center',
   },
   pressedDate: {
     width: 22,
