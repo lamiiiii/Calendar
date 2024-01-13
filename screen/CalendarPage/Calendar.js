@@ -22,6 +22,7 @@ function Calendar() {
   const [date, setDate] = useState(DAY);
   const [show, setShow] = useState(false);
 
+  // 다음달 이동 버튼
   const moveToNextMonth = (month) => {
     if (month === 12) {
       setYear((previousYear) => previousYear + 1);
@@ -31,6 +32,7 @@ function Calendar() {
     }
   };
 
+  // 이전달 이동 버튼
   const moveToPreviousMonth = (month) => {
     if (month === 1) {
       setYear((previousYear) => previousYear - 1);
@@ -40,6 +42,7 @@ function Calendar() {
     }
   };
 
+  // 특정 연도, 달 이동 
   const moveToSpecificYearAndMonth = (year, month) => {
     setYear(year);
     setMonth(month);
@@ -187,8 +190,9 @@ function Body(props) {
     })
 };
 
-returnSchedule();
-
+useEffect(() => {
+  returnSchedule();
+}, []); // 빈 배열은 컴포넌트가 마운트될 때 한 번만 실행
 
 //------------------------------------------------------------------
   
