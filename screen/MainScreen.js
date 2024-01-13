@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         margin: 30,
         marginBottom: 5,
     },
-    calendar: {
+    calendar: { // CalendarPage/Calendar.js 스타일 적용
 
     },
     buttonIcon: {
