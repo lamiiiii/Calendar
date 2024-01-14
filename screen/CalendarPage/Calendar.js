@@ -18,6 +18,12 @@ function Calendar() {
   const DAY = DATE.getDate();
   const today = { year: YEAR, month: MONTH, date: DAY };
 
+  // 오늘 날짜 기본 저장
+  AsyncStorage.multiRemove("todayYear", "todayMonth", "todayDay"); // 선택 날짜 AstncStorage 초기화
+  AsyncStorage.setItem("todayYear", JSON.stringify(today.year)); // AsyncStorage에 연도 정보 저장 (TodayYear)
+  AsyncStorage.setItem("todayMonth", JSON.stringify(today.month)); // AsyncStorage에 달 정보 저장 (TodayMonth)
+  AsyncStorage.setItem("todayDay", JSON.stringify(today.date));  // AsyncStorage에 날짜 정보 저장 (TodayDate)
+
   const [month, setMonth] = useState(MONTH);
   const [year, setYear] = useState(YEAR);
   const [date, setDate] = useState(DAY);
