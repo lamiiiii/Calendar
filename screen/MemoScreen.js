@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
     scrollViewMemo: {
         alignItems: 'center',
         // backgroundColor:"yellow",
-        flexDirection: 'collum',
+        flexDirection: 'column',
         justifyContent: 'space-between',
     },
     folderButton: {
