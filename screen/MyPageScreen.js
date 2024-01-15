@@ -9,7 +9,7 @@ import {View,
         StyleSheet,
         TouchableOpacity,
         Alert,
-        Image, 
+        Image,
         Button,
     } from 'react-native' // 화면 구성에 필요한 것들 import
 import React, { Component, useState, useEffect } from 'react';
