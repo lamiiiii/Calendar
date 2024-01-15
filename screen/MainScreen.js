@@ -1,6 +1,6 @@
 // MainScreen.js
 // 메인 화면 - 캘린더
-// 지연.part
+
 
 import { View,
         Text, 
