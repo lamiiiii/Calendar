@@ -1,6 +1,5 @@
 // MyPageScreen.js
 // 마이페이지
-
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
 import {View,
@@ -19,7 +18,6 @@ import * as ImagePicker from 'expo-image-picker'; // 이미지 업로드 패키�
 import CustomButton from '../CustomButton'; // 커스텀 버튼 가져오기
 
 const MyPageScreen = () => {
-
     const navigation = useNavigation();
     const [nickname, setNickname] = useState('');
     const [id, setId] = useState('');

@@ -22,6 +22,9 @@ import FAQ3Screen from "./screen/FAQList/FAQ3Screen";
 import FAQ4Screen from "./screen/FAQList/FAQ4Screen";
 import SuggestionScreen from "./screen/SuggestionScreen";
 import DayScheduleScreen from "./screen/DayScheduleScreen";
+import MemoScreen from "./screen/MemoScreen";
+import MemoFolder from "./screen/MemoPage/MemoFolderScreen";
+import MemoFile from "./screen/MemoPage/MemoFileScreen";
 const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
@@ -46,6 +49,9 @@ const StackNavigator = () => {
             <Stack.Screen name="FAQ4" component={FAQ4Screen}/>
             <Stack.Screen name="Suggestion" component={SuggestionScreen}/>
             <Stack.Screen name="DaySchedule" component={DayScheduleScreen}/>
+            <Stack.Screen name="Memo" component={MemoScreen}/>
+            <Stack.Screen name="MemoFolder" component={MemoFolder}/>
+            <Stack.Screen name="MemoFile" component={MemoFile}/>
         </Stack.Navigator>
         // Stack.Navigator.StackScreen을 통해서 네비게이션 등록
     )
