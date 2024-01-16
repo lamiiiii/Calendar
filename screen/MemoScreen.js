@@ -1,5 +1,6 @@
 // MemoScreen.js
 // 메모페이지
+// 지연 part
 
 import React, { useEffect } from 'react';
 import {
@@ -190,7 +191,10 @@ export default function MemoMainScreen({ }) {
             <View style={styles.folderListArea}>
                 <ScrollView
                     horizontal
-                    contentContainerStyle={styles.scrollViewFolder}
+                    contentContainerStyle={{...styles.scrollViewFolder,
+                        backgroundColor:"blue",
+                        alignItems: 'flex-start',
+                        width:(folderList.length==1 ?  folderList.length*390: (folderList.length==2?(folderList.length-1)*390:folderList.length*180))}}
                     showsHorizontalScrollIndicator={false}
                 >
                     {/*폴더 리스트*/}
@@ -368,16 +372,15 @@ const styles = StyleSheet.create({
     },
     folderListArea: {
         flexDirection: "row",
-        width: '100%',
         flex: 0.22,
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
         justifyContent: 'center',
-        // backgroundColor: "green",
+        backgroundColor: "green",
         flexDirection: 'column',
     },
     scrollViewFolder: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
         marginBottom: 5,
         height: 126,
         // backgroundColor: "blue",
