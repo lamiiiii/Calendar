@@ -54,7 +54,7 @@ const MainScreen = () => {
                 {/** 메모 페이지 이동 버튼 */}
                 <TouchableOpacity 
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('Splash')}>
+                    onPress={() => navigation.navigate('Memo')}>
                         <Image style={styles.IconImage} 
                                source={require('../assets/icons/Memo_icon.png')} />
                 </TouchableOpacity>
