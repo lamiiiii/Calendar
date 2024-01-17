@@ -21,7 +21,7 @@ import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {colors, width, height} from '../globalStyles'; //width,height 받아오기
+import {colors, width, height} from './globalStyles'; //width,height 받아오기
 import DropDownPicker from 'react-native-dropdown-picker';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -306,28 +306,28 @@ export default function MemoMainScreen({ }) {
                 {/** 메인 페이지 (일정) 이동 버튼 */}
                 <TouchableOpacity
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('Main')}>
                     <Image style={styles.IconImage}
                         source={require('../assets/icons/Calendar_icon.png')} />
                 </TouchableOpacity>
                 {/** To-do 리스트 페이지 이동 버튼 */}
                 <TouchableOpacity
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('Splash')}>
                     <Image style={styles.IconImage}
                         source={require('../assets/icons/Todo_icon.png')} />
                 </TouchableOpacity>
                 {/** To-do 리스트 페이지 이동 버튼 */}
                 <TouchableOpacity
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('Memo')}>
                     <Image style={styles.IconImage}
                         source={require('../assets/icons/Memo_icon.png')} />
                 </TouchableOpacity>
                 {/** 마이페이지 이동 버튼 */}
                 <TouchableOpacity
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('MyPage')}>
                     <Image style={styles.IconImage}
                         source={require('../assets/icons/MyPage_icon.png')} />
                 </TouchableOpacity>
