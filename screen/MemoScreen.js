@@ -21,6 +21,7 @@ import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {colors, width, height} from '../globalStyles'; //width,height 받아오기
 import DropDownPicker from 'react-native-dropdown-picker';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -192,9 +193,8 @@ export default function MemoMainScreen({ }) {
                 <ScrollView
                     horizontal
                     contentContainerStyle={{...styles.scrollViewFolder,
-                        backgroundColor:"blue",
                         alignItems: 'flex-start',
-                        width:(folderList.length==1 ?  folderList.length*390: (folderList.length==2?(folderList.length-1)*390:folderList.length*180))}}
+                        width:(folderList.length==1 ?  folderList.length*390*width: (folderList.length==2?(folderList.length-1)*390*width:folderList.length*180*width))}}
                     showsHorizontalScrollIndicator={false}
                 >
                     {/*폴더 리스트*/}
@@ -269,9 +269,12 @@ export default function MemoMainScreen({ }) {
             <View style={styles.memoListArea}>
                 <ScrollView
                     vertical
+                    //memoList.length
                     contentContainerStyle={{
                         ...styles.scrollViewMemo,
-                        height: memoListHeight,
+                        // height: memoListHeight,
+                        backgroundColor:"green",
+                        height:(memoList.length==1 ?  memoList.length*115*height: memoList.length*115*height)
                     }}
                     showsHorizontalScrollIndicator={false}
                 >
@@ -335,7 +338,7 @@ export default function MemoMainScreen({ }) {
 
 const styles = StyleSheet.create({
     styleModal: {
-        height: 1000,
+        height: height*1000,
 
     },
     constainerModelStyle: {
@@ -350,39 +353,39 @@ const styles = StyleSheet.create({
         borderColor: '#cccccc',
         borderWidth: 1,
         backgroundColor: '#ffffff',
-        padding: 5,
+        padding: width*5,
         alignItems: 'center',
     },
 
     container: {
         flex: 1,
         backgroundColor: 'white',
-        padding: 20,
+        padding: width*20,
     },
     titleArea: {
         alignItems: 'center',
         backgroundColor: "white",
         justifyContent: 'center',
-        marginBottom: 20,
+        marginBottom: height*20,
         flex: 0.22,
         // backgroundColor: "red"
     },
     title: {
-        fontSize: 40,
+        fontSize: width*40,
     },
     folderListArea: {
         flexDirection: "row",
         flex: 0.22,
         alignItems: 'flex-start',
         justifyContent: 'center',
-        backgroundColor: "green",
+        // backgroundColor: "green",
         flexDirection: 'column',
     },
     scrollViewFolder: {
         flexDirection: 'row',
         // justifyContent: 'space-between',
-        marginBottom: 5,
-        height: 126,
+        marginBottom: height*5,
+        height: height*126,
         // backgroundColor: "blue",
 
     },
@@ -394,34 +397,34 @@ const styles = StyleSheet.create({
     },
     folderButton: {
         backgroundColor: "#EEEEEE",
-        width: 170,
-        height: 120,
+        width: width*170,
+        height: height*120,
         alignItems: 'flex-start',
-        paddingTop: 15,
+        paddingTop: width*15,
         borderRadius: 15,
-        marginRight: 10,
-        paddingLeft: 10,
+        marginRight: width*10,
+        paddingLeft: width*10,
     },
     folderTitleArea: {
         color: '#404040',
         flexDirection: "row",
-        width: 140,
+        width: width*140,
         alignItems: 'center',
         // backgroundColor:'pink',
     },
     folderTitle: {
-        fontSize: 17,
-        width: 100,
+        fontSize: width*17,
+        width: width*100,
     },
     folderImage: {
-        width: 30,
-        height: 25,
+        width: width*30,
+        height: height*25,
     },
     dotImage: {
         flexDirection: "row",
         alignItems: 'flex-end',
-        width: 20,
-        height: 25,
+        width: width*20,
+        height: height*25,
     },
     folderInfo: {
         marginTop: 10,
@@ -432,63 +435,63 @@ const styles = StyleSheet.create({
         // backgroundColor: "blue",
     },
     subseperator: {            // 구분자, 구분선
-        height: 1,
+        height: height*1,
         backgroundColor: 'black',
-        marginTop: 5,
+        marginTop: height*5,
 
     },
 
     subseperatorModal: {            // 모달 안 구분자, 구분선
-        height: 0.7,
+        height: height*1,
         backgroundColor: 'grey',
-        width: 150,
+        width: width*150,
     },
     subseperatorModalLast: {            // 모달 안 구분자, 구분선 / 맨 마지막
-        marginTop: 5,
-        marginBottom: 5,
-        height: 1,
+        marginTop: height*5,
+        marginBottom: height*5,
+        height: height*1,
         backgroundColor: 'black',
-        width: 200,
+        width: width*200,
     },
 
     miniButtonArea: {
         flexDirection: "row",
-        marginTop: 5,
+        marginTop: height*5,
         alignItems: 'flex-end',
-        marginRight: 30,
-        marginBottom: 6,
+        marginRight: width*30,
+        marginBottom: height*6,
 
 
     },
     buttonSort: {
-        height: 50,
-        width: 400,
+        height: height*50,
+        width: width*400,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
         // backgroundColor: "pink"
     },
     miniButton: {
-        width: 40,
-        height: 40,
+        width: width*40,
+        height: height*40,
         // backgroundColor:"red",
 
     },
     deleteButton: {
-        width: 40,
-        height: 40,
+        width: width*40,
+        height: height*40,
         flex: 1,
     },
 
     selectButton: {
-        width: 40,
-        height: 40,
+        width: width*40,
+        height: height*40,
         flex: 1,
     },
 
     addButton: {
         width: 40,
-        height: 40,
+        height: height*40,
         flex: 1,
     },
     memoList: {
@@ -499,35 +502,36 @@ const styles = StyleSheet.create({
     },
     memoButton: {
         backgroundColor: "#EEEEEE",
-        width: 360,
-        height: 100,
+        width: width*380,
+        height: height*100,
         alignItems: 'flex-start',
-        paddingTop: 15,
+        paddingTop: height*15,
         borderRadius: 15,
-        marginRight: 10,
-        paddingLeft: 10,
-        marginBottom: 10,
+        marginRight: width*10,
+        paddingLeft: width*10,
+        marginBottom: height*10,
     },
     memoTitleArea: {
         color: '#404040',
         flexDirection: "row",
-        width: 150,
+        width: width*150,
         alignItems: 'center',
     },
     memoTitle: {
-        fontSize: 15,
-        width: 290,
+        fontSize: width*15,
+        width: width*290,
 
     },
     memoImage: {
-        width: 30,
-        height: 25,
+        width: width*30,
+        height: height*25,
+        marginRight: width*7,
     },
     memoInfo: {
-        fontSize: 13,
-        marginTop: 7,
+        fontSize: width*13,
+        marginTop: height*7,
         color: '#404040',
-        width: 335,
+        width: width*345,
     },
     buttonIcon: {
 
@@ -538,41 +542,41 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     IconImage: {
-        width: 55,
-        height: 55,
-        margin: 12,
+        width: width*55,
+        height: height*55,
+        margin: width*12,
     },
     dropdown: {
-        height: 70,
-        width: 100,
+        height: height*70,
+        width: width*100,
         alignItems: 'flex-end',
-        paddingHorizontal: 8,
+        paddingHorizontal: width*8,
     },
     icon: {
-        marginRight: 5,
+        marginRight: width*5,
     },
     label: {
         position: 'absolute',
         backgroundColor: 'white',
-        left: 22,
-        top: 8,
-        zIndex: 999,
-        paddingHorizontal: 8,
-        fontSize: 14,
+        left: width*22,
+        top: width*8,
+        zIndex: 2,  //쌓이는 요소의 개수
+        paddingHorizontal: width*8,
+        fontSize: width*14,
     },
     placeholderStyle: {
-        fontSize: 16,
+        fontSize: width*16,
     },
     selectedTextStyle: {
-        fontSize: 16,
+        fontSize: width*17,
     },
     iconStyle: {
-        width: 20,
-        height: 20,
+        width: width*20,
+        height: height*20,
     },
     inputSearchStyle: {
-        height: 40,
-        fontSize: 16,
+        height: height*40,
+        fontSize: width*16,
     },
 
 });
