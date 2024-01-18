@@ -80,7 +80,6 @@ function Calendar() {
 export default Calendar;
 
 
-
 // 일요일 빨간색 표시 구분 함수
 function isSunday(year, month, date) {
   const dayOfWeek = new Date(year, month - 1, date).getDay(); // 0 (일요일)부터 6 (토요일)까지의 값을 반환
@@ -385,14 +384,16 @@ const S = StyleSheet.create({
     height: 22,
     color: "#404040",
     backgroundColor: "rgba(133, 190, 242, 0.5)",
-    borderRadius: 20,
+    borderRadius: 11, // 반지름을 width와 height의 절반으로 설정
     textAlign: 'center',
+    overflow: 'hidden', // overflow 속성 설정 (ios 설정을 위함)
+    lineHeight: 22,
   },
   pressedDate: {
     width: 22,
     height: 22,
     backgroundColor: "rgba(144, 144, 144, 0.5)",
-    borderRadius: 20,
+    borderRadius: 11,
     justifyContent: "center",
     alignItems: "center",
   },
