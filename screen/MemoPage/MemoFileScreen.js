@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {colors, width, height} from './globalStyles'; //width,height 받아오기
 import DropDownPicker from 'react-native-dropdown-picker';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Dropdown } from 'react-native-element-dropdown';
@@ -166,27 +167,27 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        padding: 20,
+        padding: width*20,
     },
     titleArea: {
         flexDirection:"row",
         // alignItems: 'center',
         backgroundColor: "white",
         // justifyContent: 'center',
-        marginBottom: 10,
+        marginBottom: height*10,
         flex:0.08,
-        paddingTop:80,
+        paddingTop:height*80,
         // backgroundColor: "red",
         alignItems:"center",
     },
     title: {
-        width:290,
-        height:40,
-        fontSize: 30,
+        width:width*290,
+        height:height*40,
+        fontSize: width*30,
         // backgroundColor:"green",
     },
     textButton :{
-        height:20,
+        height:height*20,
         // backgroundColor: "blue",
     },
     scrollViewMemo: {
@@ -201,11 +202,11 @@ const styles = StyleSheet.create({
     },
     contentArea:{
         // backgroundColor: "yellow",
-        width: 390,
-        fontSize: 20,
+        width: width*390,
+        fontSize: width*20,
     },
     subseperator: {            // 구분자
-        height: 1,
+        height: height*1,
         backgroundColor: 'black',
         marginTop: 1,
         margin: 10,
@@ -214,26 +215,26 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     miniButton: {
-        width: 40,
-        height:40,
+        width: width*40,
+        height:height*40,
         // backgroundColor:"red",
 
     },
     deleteButton :{
-        width: 40,
-        height:40,
+        width: width*40,
+        height:height*40,
         flex:1,
     },
     
     selectButton :{
-        width: 40,
-        height:40,
+        width: width*40,
+        height:height*40,
         flex:1,
     },
     
     addButton :{
-        width: 40,
-        height:40,
+        width: width*40,
+        height:height*40,
         flex:1,
     },
     memoList:{
@@ -244,31 +245,31 @@ const styles = StyleSheet.create({
     },
     memoButton: {
         backgroundColor: "#EEEEEE",
-        width: 360,
-        height: 100,
+        width: width*360,
+        height: height*100,
         alignItems: 'flex-start',
-        paddingTop: 15,
+        paddingTop: height*15,
         borderRadius: 15,
-        marginRight: 10,
-        paddingLeft:10,
+        marginRight: width*10,
+        paddingLeft:width*10,
         marginBottom: 10,
 
     },
     memoTitleArea: {
         color: '#404040',
         flexDirection: "row",
-        width:150,
+        width:width*150,
         alignItems: 'center',
     },
     memoTitle :{
-        fontSize:15,
+        fontSize:width*15,
     },
     memoImage : {
-        width: 30,
-        height : 25,
+        width: width*30,
+        height : height*25,
     },
     memoInfo: {
-        marginTop: 7,
+        marginTop: height*7,
         color: '#404040',
     },
     buttonIcon: {
@@ -280,45 +281,45 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     IconImage: {
-        width: 55,
-        height: 55,
-        margin: 12,
+        width: width*55,
+        height: height*55,
+        margin: width*12,
     },
      dropdown: {
-        height: 70,
-        width:100,
-        paddingHorizontal: 8,
+        height: height*70,
+        width:width*100,
+        paddingHorizontal: width*8,
     },
     icon: {
-        marginRight: 5,
+        marginRight: width*5,
     },
     label: {
         position: 'absolute',
         backgroundColor: 'white',
-        left: 22,
-        top: 8,
+        left: width*22,
+        top: height*8,
         zIndex: 999,
         paddingHorizontal: 8,
-        fontSize: 14,
+        fontSize: width*14,
     },
     placeholderStyle: {
-        fontSize: 16,
+        fontSize: width*16,
     },
     selectedTextStyle: {
-        fontSize: 16,
+        fontSize: width*16,
     },
     iconStyle: {
-        width: 20,
-        height: 20,
+        width: width*20,
+        height: height*20,
     },
     inputSearchStyle: {
-        height: 40,
-        fontSize: 16,
+        height: height*40,
+        fontSize: width*16,
     },  
     dotImage : {
         flexDirection:"row",
         alignItems:'flex-end',
-        width: 20,
-        height : 25,
+        width: width*20,
+        height : height*25,
     },
 });
