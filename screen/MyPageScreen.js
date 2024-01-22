@@ -29,15 +29,17 @@ const MyPageScreen = () => {
             const parsedUserId = JSON.parse(userId); // 따옴표를 제거하기 위해 JSON 파싱
             setId(parsedUserId);
        });
-    }, []);
+       returnProfile(); // 프로필 반환
+       returnNickname(); // 닉네임 반환
+    }, []); // 두 번째 매개변수로 빈 배열을 전달하여 한 번만 실행되도록 함
 
 // 프로필 사진 반환 함수
     const returnProfile = async() => {
         // const [profileImage, setProfileImage] = useState("");   // 프로필 이미지 반환
-        const apiUrlP = 'http://43.201.9.115:3000/my-photo';   // 프로필 사진 반환 API URL
+        const apiUrlProfile = 'http://43.201.9.115:3000/my-photo';   // 프로필 사진 반환 API URL
         // Axios를 이용하여 POST 요청 보내기
         try{
-            const response = await axios.post(apiUrlP, {
+            const response = await axios.post(apiUrlProfile, {
                 userId: id,
             },);
             if(response.data["property"]=="300" || response.data["property"]=="404"){
@@ -52,19 +54,21 @@ const MyPageScreen = () => {
 
 // 닉네임 반환 함수
     const returnNickname = () => {
-        const apiUrlN = 'http://43.201.9.115:3000/my-info';  // 닉네임 반환 API URL
+        const apiUrlNickname = 'http://43.201.9.115:3000/my-info';  // 닉네임 반환 API URL
         const requestData = {
             userId: id,
         };
         // Axios를 이용하여 POST 요청 보내기
-        axios.post(apiUrlN, requestData)
+        axios.post(apiUrlNickname, requestData)
         .then(response => {
             if(response.data["property"]=="200"){
                 setNickname(response.data["nickname"]);
+                console.log("닉네임 반환 성공:", response.data);
             }
             // 요청이 실패한 경우 메세지 출력
             else{
                 setNickname("");
+                console.log("닉네임 반환 실패:", response.data);
             }
         })
         .catch(error => {
@@ -128,9 +132,6 @@ const MyPageScreen = () => {
             ]
         );
     }
-
-    returnProfile(); // 프로필 반환
-    returnNickname(); // 닉네임 반환
     
     return (
         <View style={styles.container}>

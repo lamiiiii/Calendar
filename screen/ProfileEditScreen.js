@@ -1,15 +1,16 @@
 // ProfileEditScreen.js
 // 프로필 편집 화면
 
-import {View, 
-        Text,
-        StyleSheet, 
-        Button,
-        Image,
-        TextInput,
-        Pressable,
-        TouchableOpacity,
-    } from 'react-native' 
+import {
+    View,
+    Text,
+    StyleSheet,
+    Button,
+    Image,
+    TextInput,
+    Pressable,
+    TouchableOpacity,
+} from 'react-native'
 import React, { Component, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios';
@@ -18,55 +19,57 @@ import CustomButton from '../CustomButton'; // 커스텀 버튼 가져오기
 import * as ImagePicker from 'expo-image-picker'; // 이미지 업로드 패키지
 
 const ProfileEditScreen = () => {
-    
+
     const navigation = useNavigation();
 
     const [id, setId] = useState('');
     const [nickname, setNickname] = useState('');
     const [newNickname, setNewNickname] = useState('');
 
-    useEffect(()=>{
+    useEffect(() => {  // 컴포넌트가 처음 렌더링될 때 실행되는 부분
         AsyncStorage.getItem('userId').then(userId => {
             const parsedUserId = JSON.parse(userId); // 따옴표를 제거하기 위해 JSON 파싱
             setId(parsedUserId);
-       });
-    }, []);
+        });
+        returnNickname();
+    }, []); // 두 번째 매개변수로 빈 배열을 전달하여 한 번만 실행되도록 함
 
-    // 닉네임 반환 함수
+    // 기존 닉네임 반환 함수 
     const returnNickname = () => {
-        const apiUrlN = 'http://43.201.9.115:3000/my-info';  // 닉네임 반환 API URL
+        const apiUrlNickname = 'http://43.201.9.115:3000/my-info';  // 닉네임 반환 API URL
         const requestData = {
             userId: id,
         };
         // Axios를 이용하여 POST 요청 보내기
-        axios.post(apiUrlN, requestData)
-        .then(response => {
-            if(response.data["property"]=="200"){
-                setNickname(response.data["nickname"]);
-            }
-            // 요청이 실패한 경우 메세지 출력
-            else{
-                setNickname("닉네임 반환");
-            }
-        })
-        .catch(error => {
-            // 요청이 실패한 경우 에러 처리
-            console.error('닉네임 반환 실패: ', error);
-        })
+        axios.post(apiUrlNickname, requestData)
+            .then(response => {
+                if (response.data["property"] == "200") {
+                    console.log("기존 닉네임:", response.data["nickname"]);
+                    setNickname(response.data["nickname"]);
+                }
+                // 요청이 실패한 경우 메세지 출력
+                else {
+                    setNickname("닉네임을 입력하세요");
+                }
+            })
+            .catch(error => {
+                // 요청이 실패한 경우 에러 처리
+                console.error('닉네임 반환 실패: ', error);
+            })
     }
 
-    
+
     // 현재 이미지 주소
     const [imageUrl, setImageUrl] = useState('');
     // 라이브러리 접근 권한 요청을 위한 hooks
     const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
-// 프로필 편집 - 이미지 업로드 
+    // 프로필 편집 - 이미지 업로드 
     const uploadImage = async () => {
         // 권한 확인 코드: 권한 없으면 물어보고, 승인하지 않으면 함수 종료
-        if(!status?.granted) {
+        if (!status?.granted) {
             const permission = await requestPermission();
-            if(!permission.granted){
+            if (!permission.granted) {
                 return null;
             }
         }
@@ -78,28 +81,32 @@ const ProfileEditScreen = () => {
             quality: 1, // 이미지 압축 여부 - 1로 설정하면 가장 높은 품질
             aspect: [1, 1] // 이미지 비율 설정 값
         });
-        if(result.canceled){ // 이미지 업로드 취소한 경우
+        if (result.canceled) { // 이미지 업로드 취소한 경우
             return null;
         }
 
         // 이미지 업로드 결과 및 이미지 경로 업데이트
         console.log(result);
-        setImageUrl(result.uri);
+        setImageUrl(result.assets[0].uri);
 
         // 서버에 요청 보내기
-        const localUri = result.uri;
+        const localUri = result.assets[0].uri;
         const photoFile = localUri.split('/').pop();
         const match = /\.(\w+)$/.exec(photoFile ?? '');
         const type = match ? 'image/${match[1]}' : 'image';
         const formData = new FormData();
-        formData.append('image', {uri: localUri, name: photoFile, type});
+        formData.append('image', { uri: localUri,
+                                   name: photoFile, 
+                                   type: type
+                                }
+                        );
 
-        await axios ({
+        await axios({
             method: 'put',
-            apiUrl: 'http://43.200.179.53:3000/edit-mypage',
+            url: 'http://43.201.9.115:3000/edit-mypage',
             headers: {
                 'content-type': 'multipart/form-data',
-            },  
+            },
             data: {
                 "photoFile": formData,
                 "nickname": newNickname,
@@ -108,8 +115,8 @@ const ProfileEditScreen = () => {
         })
     };
 
-
-/*
+    returnNickname();
+    /*
     // 프로필 편집 함수
     const profileChange = async () => {
         try{
@@ -121,18 +128,17 @@ const ProfileEditScreen = () => {
             console.error('닉네임 변경 실패: ', error);
         }
     }
-*/
-    returnNickname(); // 닉네임 반환
+    */
 
     return (
         <View style={styles.container}>
             <View style={styles.profileImageEdit}>
-                <Pressable onPress={uploadImage}>
-                    <Image style={styles.profileImage} 
-                       source={require('../assets/images/MyProfile.png')}
+                <Pressable onPress={() => uploadImage()}>
+                    <Image style={styles.profileImage}
+                        source={require('../assets/images/MyProfile.png')}
                     /></Pressable>
             </View>
-            <Text style = {styles.id}>ID: {id}</Text>
+            <Text style={styles.id}>ID: {id}</Text>
             <View style={styles.nicknameEdit}>
                 <TextInput      // 닉네임 입력칸
                     title='닉네임'
@@ -147,10 +153,10 @@ const ProfileEditScreen = () => {
             </View>
             <Text></Text>
             <View style={styles.nicknameButton}>
-            <CustomButton
+                <CustomButton
                     title='변경 완료'
-                    buttonColor = '#719DDF'
-                    onPress={() => {uploadImage}}
+                    buttonColor='#719DDF'
+                    onPress={() => uploadImage()}
                 />
             </View>
         </View>
@@ -161,7 +167,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         alignItems: 'center',
-        justifyContent: 'center',
+        padding: 130,
     },
     seperator: {            // 구분자
         height: 1,
@@ -176,7 +182,7 @@ const styles = StyleSheet.create({
     },
     id: {
         color: '#404040',
-        marginBottom: 20, 
+        marginBottom: 20,
     },
     nicknameEdit: {     // 닉네임 변경 뷰
 
