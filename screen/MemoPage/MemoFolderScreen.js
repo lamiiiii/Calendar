@@ -172,28 +172,28 @@ export default function MemoFolderScreen({}) {
                 {/** 메인 페이지 (일정) 이동 버튼 */}
                 <TouchableOpacity 
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('Main')}>
                         <Image style={styles.IconImage} 
                                source={require('../../assets/icons/Calendar_icon.png')} />
                 </TouchableOpacity>
                 {/** To-do 리스트 페이지 이동 버튼 */}
                 <TouchableOpacity 
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('Main')}>
                         <Image style={styles.IconImage} 
                                source={require('../../assets/icons/Todo_icon.png')} />
                 </TouchableOpacity>
                 {/** To-do 리스트 페이지 이동 버튼 */}
                 <TouchableOpacity 
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('Main')}>
                         <Image style={styles.IconImage} 
                                source={require('../../assets/icons/Memo_icon.png')} />
                 </TouchableOpacity>
                 {/** 마이페이지 이동 버튼 */}
                 <TouchableOpacity 
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('Main')}>
                         <Image style={styles.IconImage} 
                                source={require('../../assets/icons/MyPage_icon.png')} />
                 </TouchableOpacity>
