@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {colors, width, height} from './globalStyles'; //width,height 받아오기
+import {colors, width, height} from '../globalStyles'; //width,height 받아오기
 import DropDownPicker from 'react-native-dropdown-picker';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { Dropdown } from 'react-native-element-dropdown';
