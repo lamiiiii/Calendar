@@ -21,10 +21,11 @@ import { useState } from "react";
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import {colors, width, height} from './globalStyles'; //width,height 받아오기
+import { colors, width, height } from './globalStyles'; //width,height 받아오기
 import DropDownPicker from 'react-native-dropdown-picker';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Dropdown } from 'react-native-element-dropdown';
+import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger } from 'react-native-popup-menu';
 
 
 export default function MemoMainScreen({ }) {
@@ -46,6 +47,8 @@ export default function MemoMainScreen({ }) {
     const [isFocus, setIsFocus] = useState(false);
     const [folderId, setFolderId] = useState("");
     const apiUrlFolderAdd = "http://43.201.9.115:3000/create-folder";
+
+    const menuRef = React.createRef();//Menu 컴포넌트의 ref, 빈공간 클릭시 메뉴 닫기를 위한
 
 
     useEffect(() => {
@@ -135,8 +138,13 @@ export default function MemoMainScreen({ }) {
         Alert.alert(responseFolder.data["message"]);
         setDialogVisibleFolderAdd(false)
         fetchData(parsedUserId, byCreate, byName);
-
     }
+
+    const handleBackdropPress = () => {
+        console.log("menuRef",menuRef)
+        menuRef.current && menuRef.current.close(); // menuRef는 Menu 컴포넌트의 ref
+    }
+    const Divider = () => <View style={styles.divider} />; //메뉴 구분선
     return (
 
         <View style={styles.container}>
@@ -192,9 +200,11 @@ export default function MemoMainScreen({ }) {
             <View style={styles.folderListArea}>
                 <ScrollView
                     horizontal
-                    contentContainerStyle={{...styles.scrollViewFolder,
+                    contentContainerStyle={{
+                        ...styles.scrollViewFolder,
                         alignItems: 'flex-start',
-                        width:(folderList.length==1 ?  folderList.length*390*width: (folderList.length==2?(folderList.length-1)*390*width:folderList.length*180*width))}}
+                        width: (folderList.length == 1 ? folderList.length * 390 * width : (folderList.length == 2 ? (folderList.length - 1) * 390 * width : folderList.length * 180 * width))
+                    }}
                     showsHorizontalScrollIndicator={false}
                 >
                     {/*폴더 리스트*/}
@@ -210,12 +220,26 @@ export default function MemoMainScreen({ }) {
                                     source={require('../assets/icons/memo/Memo_main_folderIcon.png')}
                                 /><Text style={styles.folderTitle} numberOfLines={1}>{
                                     folder.folderName}</Text>
-                                <TouchableOpacity style={styles.miniButton}>
-                                    <Image
-                                        style={styles.dotImage}
-                                        source={require('../assets/icons/ThreeDot.png')}
-                                    />
-                                </TouchableOpacity>
+                                {/* <TouchableOpacity style={styles.miniButton} onPress={() => folderSetting(folder.folderId)}> */}
+                                <View style={{width:40*width, height:50*height, flexDirection:"row",  alignItems: 'flex-start',}}>
+                                    <MenuProvider style={{width:20*width}}>
+                                    <Menu ref={menuRef}>
+                                        <MenuTrigger>
+                                            <Image
+                                                style={styles.dotImage}
+                                                resizeMode="cover"
+                                                source={require('../assets/icons/ThreeDot.png')}>
+                                            </Image>
+                                        </MenuTrigger>
+                                        <MenuOptions customStyles={{top:-20,optionsContainer: {borderRadius: 10, width:width*40},}}>
+                                            <MenuOption text='편집' />
+                                            <Divider />
+                                            <MenuOption text='삭제' />
+                                        </MenuOptions>
+                                    </Menu>
+                                    </MenuProvider>
+                                    </View>
+                                {/* </TouchableOpacity> */}
                             </View>
                             <Text style={styles.folderInfo}>메모 {folder.memoCount}개</Text>
                         </TouchableOpacity>
@@ -273,8 +297,7 @@ export default function MemoMainScreen({ }) {
                     contentContainerStyle={{
                         ...styles.scrollViewMemo,
                         // height: memoListHeight,
-                        backgroundColor:"green",
-                        height:(memoList.length==1 ?  memoList.length*115*height: memoList.length*115*height)
+                        height: (memoList.length == 1 ? memoList.length * 115 * height : memoList.length * 115 * height)
                     }}
                     showsHorizontalScrollIndicator={false}
                 >
@@ -338,7 +361,7 @@ export default function MemoMainScreen({ }) {
 
 const styles = StyleSheet.create({
     styleModal: {
-        height: height*1000,
+        height: height * 1000,
 
     },
     constainerModelStyle: {
@@ -353,25 +376,25 @@ const styles = StyleSheet.create({
         borderColor: '#cccccc',
         borderWidth: 1,
         backgroundColor: '#ffffff',
-        padding: width*5,
+        padding: width * 5,
         alignItems: 'center',
     },
 
     container: {
         flex: 1,
         backgroundColor: 'white',
-        padding: width*20,
+        padding: width * 20,
     },
     titleArea: {
         alignItems: 'center',
         backgroundColor: "white",
         justifyContent: 'center',
-        marginBottom: height*20,
+        marginBottom: height * 20,
         flex: 0.22,
         // backgroundColor: "red"
     },
     title: {
-        fontSize: width*40,
+        fontSize: width * 40,
     },
     folderListArea: {
         flexDirection: "row",
@@ -384,8 +407,8 @@ const styles = StyleSheet.create({
     scrollViewFolder: {
         flexDirection: 'row',
         // justifyContent: 'space-between',
-        marginBottom: height*5,
-        height: height*126,
+        marginBottom: height * 5,
+        height: height * 126,
         // backgroundColor: "blue",
 
     },
@@ -397,34 +420,34 @@ const styles = StyleSheet.create({
     },
     folderButton: {
         backgroundColor: "#EEEEEE",
-        width: width*170,
-        height: height*120,
+        width: width * 170,
+        height: height * 120,
         alignItems: 'flex-start',
-        paddingTop: width*15,
+        paddingTop: width * 15,
         borderRadius: 15,
-        marginRight: width*10,
-        paddingLeft: width*10,
+        marginRight: width * 10,
+        paddingLeft: width * 10,
     },
     folderTitleArea: {
         color: '#404040',
         flexDirection: "row",
-        width: width*140,
+        width: width * 140,
         alignItems: 'center',
         // backgroundColor:'pink',
     },
     folderTitle: {
-        fontSize: width*17,
-        width: width*100,
+        fontSize: width * 17,
+        width: width * 100,
     },
     folderImage: {
-        width: width*30,
-        height: height*25,
+        width: width * 30,
+        height: height * 25,
     },
     dotImage: {
         flexDirection: "row",
         alignItems: 'flex-end',
-        width: width*20,
-        height: height*25,
+        width: width * 20,
+        height: height * 25,
     },
     folderInfo: {
         marginTop: 10,
@@ -435,103 +458,102 @@ const styles = StyleSheet.create({
         // backgroundColor: "blue",
     },
     subseperator: {            // 구분자, 구분선
-        height: height*1,
+        height: height * 1,
         backgroundColor: 'black',
-        marginTop: height*5,
+        marginTop: height * 5,
 
     },
 
     subseperatorModal: {            // 모달 안 구분자, 구분선
-        height: height*1,
+        height: height * 1,
         backgroundColor: 'grey',
-        width: width*150,
+        width: width * 150,
     },
     subseperatorModalLast: {            // 모달 안 구분자, 구분선 / 맨 마지막
-        marginTop: height*5,
-        marginBottom: height*5,
-        height: height*1,
+        marginTop: height * 5,
+        marginBottom: height * 5,
+        height: height * 1,
         backgroundColor: 'black',
-        width: width*200,
+        width: width * 200,
     },
 
     miniButtonArea: {
         flexDirection: "row",
-        marginTop: height*5,
+        marginTop: height * 5,
         alignItems: 'flex-end',
-        marginRight: width*30,
-        marginBottom: height*6,
+        marginRight: width * 30,
+        marginBottom: height * 6,
 
 
     },
     buttonSort: {
-        height: height*50,
-        width: width*400,
+        height: height * 50,
+        width: width * 400,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
         // backgroundColor: "pink"
     },
     miniButton: {
-        width: width*40,
-        height: height*40,
+        width: width * 40,
+        height: height * 40,
         // backgroundColor:"red",
 
     },
     deleteButton: {
-        width: width*40,
-        height: height*40,
+        width: width * 40,
+        height: height * 40,
         flex: 1,
     },
 
     selectButton: {
-        width: width*40,
-        height: height*40,
+        width: width * 40,
+        height: height * 40,
         flex: 1,
     },
 
     addButton: {
         width: 40,
-        height: height*40,
+        height: height * 40,
         flex: 1,
     },
     memoList: {
-        // backgroundColor:"green",
+        backgroundColor: "green",
         flex: 1,
         alignItems: 'center',
+
 
     },
     memoButton: {
         backgroundColor: "#EEEEEE",
-        width: width*380,
-        height: height*100,
+        width: width * 385,
+        height: height * 100,
         alignItems: 'flex-start',
-        paddingTop: height*15,
+        paddingTop: height * 10,
         borderRadius: 15,
-        marginRight: width*10,
-        paddingLeft: width*10,
-        marginBottom: height*10,
+        paddingLeft: width * 10,
+        marginBottom: height * 10,
     },
     memoTitleArea: {
         color: '#404040',
         flexDirection: "row",
-        width: width*150,
+        width: width * 150,
         alignItems: 'center',
     },
     memoTitle: {
-        fontSize: width*15,
-        width: width*290,
-
+        fontSize: width * 15,
+        width: width * 300,
     },
     memoImage: {
-        width: width*30,
-        height: height*25,
-        marginRight: width*7,
+        width: width * 30,
+        height: height * 25,
+        marginRight: width * 7,
     },
     memoInfo: {
-        fontSize: width*13,
-        marginTop: height*7,
+        fontSize: width * 13,
+        marginTop: height * 7,
         color: '#404040',
-        width: width*345,
+        width: width * 345,
     },
     buttonIcon: {
 
@@ -542,41 +564,49 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     IconImage: {
-        width: width*55,
-        height: height*55,
-        margin: width*12,
+        width: width * 55,
+        height: height * 55,
+        margin: width * 12,
     },
     dropdown: {
-        height: height*70,
-        width: width*100,
+        height: height * 70,
+        width: width * 100,
         alignItems: 'flex-end',
-        paddingHorizontal: width*8,
+        paddingHorizontal: width * 8,
     },
     icon: {
-        marginRight: width*5,
+        marginRight: width * 5,
     },
     label: {
         position: 'absolute',
         backgroundColor: 'white',
-        left: width*22,
-        top: width*8,
+        left: width * 22,
+        top: width * 8,
         zIndex: 2,  //쌓이는 요소의 개수
-        paddingHorizontal: width*8,
-        fontSize: width*14,
+        paddingHorizontal: width * 8,
+        fontSize: width * 14,
     },
     placeholderStyle: {
-        fontSize: width*16,
+        fontSize: width * 16,
     },
     selectedTextStyle: {
-        fontSize: width*17,
+        fontSize: width * 17,
     },
     iconStyle: {
-        width: width*20,
-        height: height*20,
+        width: width * 20,
+        height: height * 20,
     },
     inputSearchStyle: {
-        height: height*40,
-        fontSize: width*16,
+        height: height * 40,
+        fontSize: width * 16,
     },
-
+    optionsStyle:{
+        height: height * 10,
+        width: width * 10,
+        marginRight: width * 70,
+    },
+    divider: {
+        height: StyleSheet.hairlineWidth,
+        backgroundColor: "#7F8487",
+      },
 });

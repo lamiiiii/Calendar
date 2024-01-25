@@ -248,9 +248,8 @@ const styles = StyleSheet.create({
         width: width*360,
         height: height*100,
         alignItems: 'flex-start',
-        paddingTop: height*15,
+        paddingTop: height*10,
         borderRadius: 15,
-        marginRight: width*10,
         paddingLeft:width*10,
         marginBottom: 10,
 
