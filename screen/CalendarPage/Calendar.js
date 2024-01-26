@@ -19,7 +19,8 @@ function Calendar() {
   const today = { year: YEAR, month: MONTH, date: DAY };
 
   // 오늘 날짜 기본 저장
-  AsyncStorage.multiRemove("todayYear", "todayMonth", "todayDay"); // 선택 날짜 AstncStorage 초기화
+  const keysToRemove = ['todayYear', 'todayMonth', 'todayDay']; // multiRemove 메서드는 배열을 인자로 받음 => 배열로 따로 저장해줌 (경고 해결)
+  AsyncStorage.multiRemove(keysToRemove); // 선택 날짜 AstncStorage 초기화 
   AsyncStorage.setItem("todayYear", JSON.stringify(today.year)); // AsyncStorage에 연도 정보 저장 (TodayYear)
   AsyncStorage.setItem("todayMonth", JSON.stringify(today.month)); // AsyncStorage에 달 정보 저장 (TodayMonth)
   AsyncStorage.setItem("todayDay", JSON.stringify(today.date));  // AsyncStorage에 날짜 정보 저장 (TodayDate)
@@ -261,7 +262,9 @@ function Body(props) {
   // 선택 날짜 정보 저장
   const handlePressDay = (pressedDate) => {
     setPressedDate(pressedDate);
-    AsyncStorage.multiRemove("todayYear", "todayMonth", "todayDay"); // 선택 날짜 AstncStorage 초기화
+
+    const keysToRemove = ['todayYear', 'todayMonth', 'todayDay']; // multiRemove 메서드는 배열을 인자로 받음 => 배열로 따로 저장해줌 (경고 해결)
+    AsyncStorage.multiRemove(keysToRemove); // 선택 날짜 AstncStorage 초기화
     AsyncStorage.setItem("todayYear", JSON.stringify(pressedDate.year)); // AsyncStorage에 연도 정보 저장 (TodayYear)
     AsyncStorage.setItem("todayMonth", JSON.stringify(pressedDate.month)); // AsyncStorage에 달 정보 저장 (TodayMonth)
     AsyncStorage.setItem("todayDay", JSON.stringify(pressedDate.date));  // AsyncStorage에 날짜 정보 저장 (TodayDate)
