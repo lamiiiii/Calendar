@@ -14,6 +14,7 @@ import {
     Button,
     Alert,
     RefreshControl,
+    Pressable
 } from 'react-native';
 
 import DialogInput from "react-native-dialog-input";
@@ -35,7 +36,7 @@ export default function MemoMainScreen({ }) {
     ];
 
     const navigation = useNavigation();
-    const [visibleMoal, setVisibleModal] = useState(false);
+    const [visibleModal, setVisibleModal] = useState(false);
     const [dialogVisibleFolderAdd, setDialogVisibleFolderAdd] = useState(false);
     const [folderList, setFolderList] = useState([]);
     const [memoList, setMemoList] = useState([]);
@@ -47,6 +48,7 @@ export default function MemoMainScreen({ }) {
     const [isFocus, setIsFocus] = useState(false);
     const [folderId, setFolderId] = useState("");
     const apiUrlFolderAdd = "http://43.201.9.115:3000/create-folder";
+    const apiUrlFolderDelete ="http://43.201.9.115:3000/delete-folder";
 
     const menuRef = React.createRef();//Menu 컴포넌트의 ref, 빈공간 클릭시 메뉴 닫기를 위한
 
@@ -75,6 +77,7 @@ export default function MemoMainScreen({ }) {
             setFolderList(responseFolder.data.data);
             const responseMemo = await axios.post('http://43.201.9.115:3000/unfolder-memo', requestDataMemo);
             setMemoList(responseMemo.data.data);
+
 
 
             console.log("메모길이: ", memoList.length, " 메모 높이: ", memoListHeight);
@@ -137,12 +140,27 @@ export default function MemoMainScreen({ }) {
         const responseFolder = await axios.post(apiUrlFolderAdd, requestDataFolderAdd);
         Alert.alert(responseFolder.data["message"]);
         setDialogVisibleFolderAdd(false)
-        fetchData(parsedUserId, byCreate, byName);
+        fetchData(userId, byCreate, byName);
     }
 
-    const handleBackdropPress = () => {
-        console.log("menuRef",menuRef)
-        menuRef.current && menuRef.current.close(); // menuRef는 Menu 컴포넌트의 ref
+    const folderDelete = async(folderId) => {
+        const requestDataFolderDelete={
+            folderId:folderId
+        }
+        console.log('삭제', folderId);
+        try{
+            const responseFolder = await axios.delete(apiUrlFolderDelete, requestDataFolderDelete);
+            Alert.alert(responseFolder.data["message"]);
+            console.log(responseFolder.data["message"]);
+            fetchData(userId, byCreate, byName);
+    }
+    catch(err){
+        console.log(err)
+    }
+
+    }
+    const folderEdit = (folderId)=>{
+        console.log('편집창')
     }
     const Divider = () => <View style={styles.divider} />; //메뉴 구분선
     return (
@@ -173,8 +191,9 @@ export default function MemoMainScreen({ }) {
             {/* 부가 기능 모달 */}
             <Modal animationType="slide"
                 transparent={true}
-                visible={visibleMoal}
-                onBackdropPress={() => setVisibleModal(false)}>
+                visible={visibleModal}
+                // onBackdropPress={() => setVisibleModal(false)}
+                onBackdropPress={() => this.closeModal()}>
                 <View style={styles.constainerModelStyle}>
                     <View style={styles.viewModalStyle}>
                         {/*Modal 부가 기능 버튼 모음*/}
@@ -214,34 +233,40 @@ export default function MemoMainScreen({ }) {
                             onPress={() => moveToFolder(folder.folderId)}
                             key={index}
                         >
-                            <View style={styles.folderTitleArea}>
-                                <Image
-                                    style={styles.folderImage}
-                                    source={require('../assets/icons/memo/Memo_main_folderIcon.png')}
-                                /><Text style={styles.folderTitle} numberOfLines={1}>{
-                                    folder.folderName}</Text>
-                                {/* <TouchableOpacity style={styles.miniButton} onPress={() => folderSetting(folder.folderId)}> */}
-                                <View style={{width:40*width, height:50*height, flexDirection:"row",  alignItems: 'flex-start',}}>
-                                    <MenuProvider style={{width:20*width}}>
-                                    <Menu ref={menuRef}>
-                                        <MenuTrigger>
-                                            <Image
-                                                style={styles.dotImage}
-                                                resizeMode="cover"
-                                                source={require('../assets/icons/ThreeDot.png')}>
-                                            </Image>
-                                        </MenuTrigger>
-                                        <MenuOptions customStyles={{top:-20,optionsContainer: {borderRadius: 10, width:width*40},}}>
-                                            <MenuOption text='편집' />
-                                            <Divider />
-                                            <MenuOption text='삭제' />
-                                        </MenuOptions>
-                                    </Menu>
-                                    </MenuProvider>
+                            <View style={styles.folderContainer}>
+                                <View style={styles.folderTopArea}>
+                                    <View style={styles.folderTitleArea}>
+                                        <Image
+                                            style={styles.folderImage}
+                                            source={require('../assets/icons/memo/Memo_main_folderIcon.png')}
+                                        /><Text style={styles.folderTitle} numberOfLines={1}>{
+                                            folder.folderName}</Text>
+                                        {/* <TouchableOpacity style={styles.miniButton} onPress={() => folderSetting(folder.folderId)}> */}
+
                                     </View>
-                                {/* </TouchableOpacity> */}
+                                    <View style={styles.folderPopupMenuArea}>
+                                        <View style={styles.editButtonV}>
+                                        </View>
+                                        <MenuProvider style={{ width: 20 * width }}>
+                                            <Menu ref={menuRef}>
+                                                <MenuTrigger>
+                                                    <Image
+                                                        style={styles.dotImage}
+                                                        resizeMode="cover"
+                                                        source={require('../assets/icons/ThreeDot.png')}>
+                                                    </Image>
+                                                </MenuTrigger>
+                                                <MenuOptions customStyles={{ optionsContainer: { borderRadius: width * 10, width: width * 40, borderColor : '#cccccc', borderWidth : 1, backgroundColor : '#ffffff', }, }}>
+                                                    <MenuOption text='편집' onSelect={() => folderEdit(folder.folderId)} />
+                                                    <Divider />
+                                                    <MenuOption text='삭제' onSelect={() => folderDelete(folder.folderId)} />
+                                                </MenuOptions>
+                                            </Menu>
+                                        </MenuProvider>
+                                    </View>
+                                </View>
+                                <Text style={styles.folderInfo}>메모 {folder.memoCount}개</Text>
                             </View>
-                            <Text style={styles.folderInfo}>메모 {folder.memoCount}개</Text>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
@@ -415,14 +440,23 @@ const styles = StyleSheet.create({
     scrollViewMemo: {
         alignItems: 'center',
         // backgroundColor:"yellow",
-        flexDirection: 'column',
         justifyContent: 'space-between',
+        flexDirection: 'column',
+    },
+    folderTopArea: {
+        alignItems: 'flex-start',
+        flexDirection: 'row',
+    },
+    folderContainer: {
+        alignItems: 'flex-start',
+        flexDirection: 'colum',
     },
     folderButton: {
         backgroundColor: "#EEEEEE",
         width: width * 170,
         height: height * 120,
         alignItems: 'flex-start',
+        flexDirection: 'row',
         paddingTop: width * 15,
         borderRadius: 15,
         marginRight: width * 10,
@@ -431,9 +465,8 @@ const styles = StyleSheet.create({
     folderTitleArea: {
         color: '#404040',
         flexDirection: "row",
-        width: width * 140,
+        width: width * 120,
         alignItems: 'center',
-        // backgroundColor:'pink',
     },
     folderTitle: {
         fontSize: width * 17,
@@ -450,7 +483,6 @@ const styles = StyleSheet.create({
         height: height * 25,
     },
     folderInfo: {
-        marginTop: 10,
         color: '#404040',
     },
     memoListArea: {
@@ -600,7 +632,13 @@ const styles = StyleSheet.create({
         height: height * 40,
         fontSize: width * 16,
     },
-    optionsStyle:{
+    folderPopupMenuArea: {
+        width: 40 * width,
+        height: 70 * height,
+        flexDirection: "row",
+        alignItems: 'flex-start',
+    },
+    optionsStyle: {
         height: height * 10,
         width: width * 10,
         marginRight: width * 70,
@@ -608,5 +646,5 @@ const styles = StyleSheet.create({
     divider: {
         height: StyleSheet.hairlineWidth,
         backgroundColor: "#7F8487",
-      },
+    },
 });
