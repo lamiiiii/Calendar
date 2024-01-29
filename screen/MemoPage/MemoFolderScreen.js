@@ -145,7 +145,7 @@ export default function MemoFolderScreen({}) {
                 vertical
                 contentContainerStyle={{
                 ...styles.scrollViewMemo,
-                    height: memoListHeight,}}
+                height:(memoList.length==1 ?  memoList.length*115*height: memoList.length*115*height),}}
                 showsHorizontalScrollIndicator={false}
             >
                 {/*메모 리스트*/}
@@ -160,7 +160,10 @@ export default function MemoFolderScreen({}) {
                             style={styles.memoImage}
                             source={require('../../assets/icons/memo/Memo_main_folderIcon.png')}
                             /><Text style={styles.memoTitle}>{
-                            memo.memoName}</Text></View>
+                            memo.memoName}</Text><Image
+                            style={styles.dotImage}
+                            source={require('../../assets/icons/ThreeDot.png')}
+                        /></View>
                             {/*Text 길이제한*/}
                         <Text style={styles.memoInfo} numberOfLines={3}>{memo.content}</Text>
                     </TouchableOpacity>
@@ -172,28 +175,28 @@ export default function MemoFolderScreen({}) {
                 {/** 메인 페이지 (일정) 이동 버튼 */}
                 <TouchableOpacity 
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('Main')}>
                         <Image style={styles.IconImage} 
                                source={require('../../assets/icons/Calendar_icon.png')} />
                 </TouchableOpacity>
                 {/** To-do 리스트 페이지 이동 버튼 */}
                 <TouchableOpacity 
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('Main')}>
                         <Image style={styles.IconImage} 
                                source={require('../../assets/icons/Todo_icon.png')} />
                 </TouchableOpacity>
                 {/** To-do 리스트 페이지 이동 버튼 */}
                 <TouchableOpacity 
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('Main')}>
                         <Image style={styles.IconImage} 
                                source={require('../../assets/icons/Memo_icon.png')} />
                 </TouchableOpacity>
                 {/** 마이페이지 이동 버튼 */}
                 <TouchableOpacity 
                     style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('main')}>
+                    onPress={() => navigation.navigate('Main')}>
                         <Image style={styles.IconImage} 
                                source={require('../../assets/icons/MyPage_icon.png')} />
                 </TouchableOpacity>
@@ -229,6 +232,12 @@ const styles = StyleSheet.create({
         // backgroundColor:"yellow",
         flexDirection: 'column',
         justifyContent: 'space-between',
+    },
+    dotImage: {
+        flexDirection: "row",
+        alignItems: 'flex-end',
+        width: width*20,
+        height: height*25,
     },
     memoListArea: {
         flex: 0.8,
@@ -270,16 +279,16 @@ const styles = StyleSheet.create({
         backgroundColor:"green",
         flex:1,
         alignItems: 'center',
+
         
     },
     memoButton: {
         backgroundColor: "#EEEEEE",
-        width: width*360,
+        width: width*385,
         height: height*100,
         alignItems: 'flex-start',
-        paddingTop: height*15,
+        paddingTop: height*10,
         borderRadius: 15,
-        marginRight: width*10,
         paddingLeft:width*10,
         marginBottom: height*10,
 
@@ -292,16 +301,18 @@ const styles = StyleSheet.create({
     },
     memoTitle :{
         fontSize:width*15,
+        width: width*300,
     },
     memoImage : {
         width: width*30,
         height : height*25,
+        marginRight: width*7,
     },
     memoInfo: {
         marginTop: 7,
         color: '#404040',
         width:width*335,
-        fontSize:13,
+        fontSize: width*13,
     },
     buttonIcon: {
 
