@@ -118,7 +118,7 @@ const MyPageScreen = () => {
 // 로그아웃 구현 함수
     const doLogout = () => {
         try {
-            console.log("로그아웃 확인");
+            console.log(id, "회원 로그아웃 성공");
             AsyncStorage.clear();       // AsyncStorage에 있는 아이디 정보 지우기
             AsyncStorage.getItem('value').then(value => console.log("로그인 정보 없음: ", value));
             navigation.navigate('Splash')        // 로그아웃 후 화면 이동
@@ -153,7 +153,7 @@ const MyPageScreen = () => {
             [ // 버튼 배열
                 {
                     text: "취소",                 // 버튼 제목          
-                    onPress: () => console.log("회원 탈퇴 취소")
+                    onPress: () => console.log(id, "회원 탈퇴 취소")
                 },    //onPress 이벤트시 콘솔창에 로그를 찍는다                                     
                 {
                     text: "확인",                 //버튼 제목
