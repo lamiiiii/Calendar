@@ -82,8 +82,8 @@ const CheckPasswordScreen = () => {
                 <CustomButton
                     title='확인'
                     buttonColor = '#606060' 
-                    onPress={deleteAccount}                                       
-                    /*onPress={() => 
+                    // onPress={deleteAccount}    // 2중 확인                                   
+                    onPress={() =>                // 3중 확인
                         Alert.alert('확인을 누르면 회원 정보가 삭제됩니다.',
                         '', 
                         [ 
@@ -91,7 +91,8 @@ const CheckPasswordScreen = () => {
                             onPress: ()=> console.log("회원 탈퇴 취소")}, 
                             { text: "확인", 
                             onPress: ()=> {deleteAccount()}}
-                        ])}*//>
+                        ])}
+                />
             </View>
             <Text></Text>
     </View>

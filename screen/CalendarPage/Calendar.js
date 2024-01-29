@@ -8,6 +8,13 @@ import SelectMonthModal from "./SelectMonthModal";
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage"; // 로그인 정보 저장
 import DateTimePicker from "react-native-modal-datetime-picker";
+import { GestureHandlerRootView, PanGestureHandler, State } from "react-native-gesture-handler"; // 제스처
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  useAnimatedGestureHandler,
+} from 'react-native-reanimated'; // 애니메이션
 
 
 // 달력 메인페이지 구성 함수
@@ -19,22 +26,71 @@ function Calendar() {
   const today = { year: YEAR, month: MONTH, date: DAY };
 
   // 오늘 날짜 기본 저장
-  AsyncStorage.multiRemove("todayYear", "todayMonth", "todayDay"); // 선택 날짜 AstncStorage 초기화
-  AsyncStorage.setItem("todayYear", JSON.stringify(today.year)); // AsyncStorage에 연도 정보 저장 (TodayYear)
-  AsyncStorage.setItem("todayMonth", JSON.stringify(today.month)); // AsyncStorage에 달 정보 저장 (TodayMonth)
-  AsyncStorage.setItem("todayDay", JSON.stringify(today.date));  // AsyncStorage에 날짜 정보 저장 (TodayDate)
+  useEffect(() => {
+    const saveTodayToAsyncStorage = async () => {
+      const keysToRemove = ['todayYear', 'todayMonth', 'todayDay'];
+      await AsyncStorage.multiRemove(keysToRemove);
+      await AsyncStorage.setItem('todayYear', JSON.stringify(today.year));
+      await AsyncStorage.setItem('todayMonth', JSON.stringify(today.month));
+      await AsyncStorage.setItem('todayDay', JSON.stringify(today.date));
+    };
+
+    saveTodayToAsyncStorage();
+  }, [today]);
 
   const [month, setMonth] = useState(MONTH);
   const [year, setYear] = useState(YEAR);
   const [date, setDate] = useState(DAY);
   const [show, setShow] = useState(false);
 
+  // 애니메이션에 사용할 변수들
+  const translateX = useSharedValue(0); // 가로축 이동 애니메이션
+
+  const gestureHandler = useAnimatedGestureHandler({
+    onStart: (_, ctx) => { // 제스처 시작 시 실행 콜백
+      console.log('제스처 시작', translateX.value);
+      console.log("현재는", month);
+      ctx.startX = translateX.value;
+    },
+    onActive: (event, ctx) => { // 제스처 진행 중 콜백
+      console.log('제스처 진행 중', translateX.value);
+      console.log("현재는", month);
+      translateX.value = ctx.startX + event.translationX;
+    },
+    onEnd: () => { // 제스처 종료 시 실행 콜백
+      console.log('제스처 종료', translateX.value);
+      console.log("현재는", month);
+      const threshold = 100; // 이 값은 조절 가능 (특정 임계값)
+      // 임계 값을 넘으면 적절한 함수를 호출하여 달력의 월 변경
+      if (translateX.value > threshold) {
+        console.log("현재는", month);
+        console.log("이전 달 슬라이드");
+        moveToPreviousMonth(month);                       // 왜 안되는 것이지?????????????????????????
+      } else if (translateX.value < -threshold) {
+        console.log("다음 달 슬라이드");
+        moveToNextMonth(month);                           // 왜 안되는 것이지?????????????????????????
+      } else { // 넘지 않으면 초기화
+        console.log("제스처 초기화");
+        translateX.value = withSpring(0);
+      }
+    },
+  });
+
+  // 에니메이션 스타일 생성 함수
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }],
+    };
+  });
+
   // 다음달 이동 버튼
   const moveToNextMonth = (month) => {
     if (month === 12) { // 현재가 12월이면, 다음 연도로 변경하고 1월로 설정
+      console.log("현재는", month);
       setYear((previousYear) => previousYear + 1);
       setMonth(1);
     } else { // 나머지는 월만 변경 (+1)
+      console.log("현재는", month);
       setMonth((previousMonth) => previousMonth + 1);
     }
   };
@@ -64,16 +120,22 @@ function Calendar() {
         moveToPreviousMonth={moveToPreviousMonth}
         moveToSpecificYearAndMonth={moveToSpecificYearAndMonth}
       />
-      <Body
-        month={month}
-        year={year}
-        today={today}
-        date={date}
-        moveToNextMonth={moveToNextMonth}
-        moveToPreviousMonth={moveToPreviousMonth}
-        moveToSpecificYearAndMonth={moveToSpecificYearAndMonth}
-      />
-    </View>
+      <GestureHandlerRootView>
+        <PanGestureHandler onGestureEvent={gestureHandler}>
+          <Animated.View style={[S.calendarContainer, animatedStyle]}>
+            <Body
+              month={month}
+              year={year}
+              today={today}
+              date={date}
+              moveToNextMonth={() => moveToNextMonth(month)}
+              moveToPreviousMonth={() => moveToPreviousMonth(month)}
+              moveToSpecificYearAndMonth={moveToSpecificYearAndMonth}
+            />
+          </Animated.View>
+        </PanGestureHandler>
+      </GestureHandlerRootView>
+    </View >
   );
 }
 
@@ -86,6 +148,7 @@ function isSunday(year, month, date) {
   return dayOfWeek === 0;
 }
 
+
 // 달력 메인페이지 헤더 구성 함수
 function Header(props) {
   const [yearModalVisible, setYearModalVisible] = useState(false);
@@ -95,8 +158,18 @@ function Header(props) {
   const [open, setOpen] = useState(false)
   const [visible, setVisible] = useState(false); // 모달 노출 여부
 
+  // 오늘 날짜 페이지로 이동 함수
+  const onPressToday = () => {
+    const today = new Date();
+    const todayYear = today.getFullYear();
+    const todayMonth = today.getMonth() + 1;
+
+    // moveToSpecificYearAndMonth 함수를 호출하여 오늘 날짜로 이동
+    props.moveToSpecificYearAndMonth(todayYear, todayMonth);
+  };
+
+  // 특정 날짜 클릭 시
   const onPressDate = () => { // 날짜 클릭 시
-    setMode('date'); // 모달 유형을 date로 변경
     setVisible(true); // 모달 open
   };
 
@@ -111,6 +184,9 @@ function Header(props) {
 
   return (
     <>
+      <Pressable onPress={onPressToday}>
+        <Text>Today</Text>
+      </Pressable>
       <View style={S.header}>
         {/* 이전 달로 이동 버튼 */}
         <Pressable
@@ -121,7 +197,10 @@ function Header(props) {
 
         {/* 사용자가 설정한 특정 연도, 월, 날짜로 이동 버튼 */}
         <View style={{ flexDirection: "row" }}>
-          <Text>{props.year}년 {props.month}월 </Text>
+          {/* 날짜 선택 버튼 */}
+          <Pressable onPress={onPressDate}>
+            <Text>{props.year}년 {props.month}월 </Text>
+          </Pressable>
         </View>
 
         {/* 다음 달로 이동 버튼 */}
@@ -132,13 +211,20 @@ function Header(props) {
         </Pressable>
       </View>
 
-      {/* <DateTimePicker
-            isVisible={visible}
-            open={open}
-            mode={date}
-            onConfirm={onConfirm}
-            onCancel={onCancel}
-            date={date} /> */}
+      {/* DateTimePicker */}
+      {visible && (
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="spinner"
+          onChange={(event, selectedDate) => {
+            if (event.type === 'set') { // 'set' 이벤트에서만 처리하도록 추가
+              onConfirm(selectedDate);
+            }
+            setVisible(false);
+          }}
+        />
+      )}
     </>
   );
 }
@@ -261,7 +347,9 @@ function Body(props) {
   // 선택 날짜 정보 저장
   const handlePressDay = (pressedDate) => {
     setPressedDate(pressedDate);
-    AsyncStorage.multiRemove("todayYear", "todayMonth", "todayDay"); // 선택 날짜 AstncStorage 초기화
+
+    const keysToRemove = ['todayYear', 'todayMonth', 'todayDay']; // multiRemove 메서드는 배열을 인자로 받음 => 배열로 따로 저장해줌 (경고 해결)
+    AsyncStorage.multiRemove(keysToRemove); // 선택 날짜 AstncStorage 초기화
     AsyncStorage.setItem("todayYear", JSON.stringify(pressedDate.year)); // AsyncStorage에 연도 정보 저장 (TodayYear)
     AsyncStorage.setItem("todayMonth", JSON.stringify(pressedDate.month)); // AsyncStorage에 달 정보 저장 (TodayMonth)
     AsyncStorage.setItem("todayDay", JSON.stringify(pressedDate.date));  // AsyncStorage에 날짜 정보 저장 (TodayDate)
@@ -336,7 +424,13 @@ function Body(props) {
   );
 }
 
+
+
+
 const dayOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+
+
 
 const S = StyleSheet.create({
   calendarContainer: {
@@ -344,7 +438,7 @@ const S = StyleSheet.create({
     minHeight: "50%",
     borderBottomColor: "black",
     backgroundColor: "#fff",
-    paddingHorizontal: 16,
+    paddingHorizontal: 10,
   },
   header: {
     marginTop: 20,

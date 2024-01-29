@@ -58,7 +58,7 @@ const LoginScreen = () => {
                 )
                 saveId();       // 로그인 정보 저장 함수
                 AsyncStorage.getItem('userId').then(value => {      // 로그인 정보 저장했는지 로그 확인용
-                    console.log(value);
+                    console.log("로그인 아이디: ", value);
                });
                 navigation.navigate('Main')
             }
@@ -66,7 +66,7 @@ const LoginScreen = () => {
             else{
                 Alert.alert(
                     response.data["message"],
-                    "에러 발생"
+                    "로그인 정보를 다시 입력해주세요."
                 )
             }
         })

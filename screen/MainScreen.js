@@ -25,12 +25,12 @@ return (
         <View style={styles.titleArea}>
             <Text style={styles.titleText}>Calendar</Text>
         </View>
-        <View style={styles.addButton}>
+        {/* <View style={styles.addButton}>
         <TouchableOpacity 
             onPress={() => navigation.navigate('DaySchedule')}>
                 <Image source={require('../assets/icons/AddButton.png')} style={styles.addIconImage}/>
         </TouchableOpacity>
-        </View>
+        </View> */}
         <View style={styles.calendarContainer}>
             <Calendar style={styles.calendar}/>
         </View>
@@ -89,7 +89,7 @@ addIconImage:{
 },
 calendarContainer:{
     backgroundColor: 'white', // white임
-    height: '68%',
+    height: '69%',
 },
 container: {
     flex: 1,
