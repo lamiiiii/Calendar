@@ -10,13 +10,15 @@ import {
     TextInput,
     Pressable,
     TouchableOpacity,
+    KeyboardAvoidingView // 키보드 때문에 화면 가리는 거 해결
 } from 'react-native'
 import React, { Component, useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native'
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage"; // 로그인 정보 저장
-import CustomButton from '../CustomButton'; // 커스텀 버튼 가져오기
 import * as ImagePicker from 'expo-image-picker'; // 이미지 업로드 패키지
+import { colors, width, height } from './globalStyles'; //width,height 받아오기
+import CustomButton from '../CustomButton'; // 커스텀 버튼 가져오기
 
 const ProfileEditScreen = () => {
 
@@ -50,8 +52,21 @@ const ProfileEditScreen = () => {
         fetchData();
     }, []); // 두 번째 매개변수로 빈 배열을 전달하여 한 번만 실행되도록 함
 
+    // BackButton 기능 구현
+    const handlePop = () => {
+        const previousScreen = navigation?.getState()?.routes[navigation?.getState()?.index - 1];
 
-// 기존 닉네임 반환 함수
+        if (previousScreen) {
+            console.log('이전 스크린:', previousScreen.name);
+            // 이전 스크린에 대한 추가 정보를 필요하다면 previousScreen.params 등을 사용할 수 있습니다.
+
+            navigation.pop(); // 이전 스크린으로 돌아가는 함수 호출
+        } else {
+            console.log('현재 스크린이 root 스크린. 이전 스크린 없음');
+        }
+    };
+
+    // 기존 닉네임 반환 함수
     const returnNickname = async (userId) => {
         const apiUrlNickname = 'http://43.201.9.115:3000/my-info';  // 닉네임 반환 API URL
         // Axios를 이용하여 POST 요청 보내기
@@ -82,7 +97,7 @@ const ProfileEditScreen = () => {
     // 라이브러리 접근 권한 요청을 위한 hooks
     const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
 
-// 프로필 편집 - 이미지 업로드 
+    // 프로필 편집 - 이미지 업로드 
     const uploadImage = async () => {
         // 권한 확인 코드: 권한 없으면 물어보고, 승인하지 않으면 함수 종료
         if (!status?.granted) {
@@ -133,7 +148,7 @@ const ProfileEditScreen = () => {
     };
 
 
-// 프로필 변경 함수
+    // 프로필 변경 함수
     const profileChange = async (photoFile, nickname, userId) => {
         try {
             // FormData 객체 생성
@@ -165,67 +180,93 @@ const ProfileEditScreen = () => {
 
 
     return (
-        <View style={styles.container}>
-            <View style={styles.profileImageEdit}>
-                <Pressable onPress={() => uploadImage()}>
-                    <Image style={styles.profileImage}
-                        source={require('../assets/images/MyProfile.png')}
-                    /></Pressable>
+        <KeyboardAvoidingView // 키보드 때문에 화면 가리는 거 해결
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            style={styles.container}
+        >
+            <View style={styles.container}>
+                <View style={styles.HeaderContainer}>
+                    {/* 뒤로가기 버튼 */}
+                    <TouchableOpacity onPress={handlePop}><Image style={styles.BackButton} source={require('../assets/icons/BackToPage.png')} /></TouchableOpacity>
+                </View>
+                {/* HeaderContainer view 끝 */}
+                <View style={styles.BodyContainer}>
+                    <View style={styles.profileImageEdit}>
+                        <Pressable onPress={() => uploadImage()}>
+                            <Image style={styles.profileImage}
+                                source={require('../assets/images/MyProfile.png')}
+                            /></Pressable>
+                    </View>
+                    <Text style={styles.id}>ID: {id}</Text>
+                    <View style={styles.nicknameEdit}>
+                        <TextInput      // 닉네임 입력칸
+                            title='닉네임'
+                            style={styles.TextForm}
+                            placeholder={nickname}
+                            value={newNickname}
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            // onChangeText는?
+                            onChangeText={(text) => setNewNickname(text)}
+                        />
+                    </View>
+                    <Text></Text>
+                    <View style={styles.nicknameButton}>
+                        <CustomButton
+                            title='변경 완료'
+                            buttonColor='#719DDF'
+                            onPress={() => profileChange("", newNickname, id)}
+                        />
+                    </View>
+                    {/* nicknameButton view 끝*/}
+                </View>
+                {/* BodyContainer view 끝*/}
             </View>
-            <Text style={styles.id}>ID: {id}</Text>
-            <View style={styles.nicknameEdit}>
-                <TextInput      // 닉네임 입력칸
-                    title='닉네임'
-                    style={styles.TextForm}
-                    placeholder={nickname}
-                    value={newNickname}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    // onChangeText는?
-                    onChangeText={(text) => setNewNickname(text)}
-                />
-            </View>
-            <Text></Text>
-            <View style={styles.nicknameButton}>
-                <CustomButton
-                    title='변경 완료'
-                    buttonColor='#719DDF'
-                    onPress={() => profileChange("", newNickname, id)}
-                />
-            </View>
-        </View>
+            {/* Container view 끝*/}
+        </KeyboardAvoidingView>
     )
 }
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        alignItems: 'center',
-        padding: 130,
     },
-    seperator: {            // 구분자
-        height: 1,
-        backgroundColor: 'black',
+    BackButton: {      // 뒤로가기 버튼 스타일
+        marginTop: height * 60,
+        marginLeft: width * 10,
+        height: height * 30,
+        width: width * 30,
+    },
+    HeaderContainer: { // header 컨테이너 (뒤로가기 버튼)
+        flex: 1,
+        // backgroundColor: 'red', // 컨테이너 확인용
+    },
+    BodyContainer: { // body 컨테이너 (주 내용)
+        flex: 6,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: width*140,
+        // backgroundColor: 'blue', // 컨테이너 확인용
     },
     profileImageEdit: {     // 프로필 이미지 변경 뷰
 
     },
     profileImage: {     // 프로필 이미지 크기
-        width: 150,
-        height: 150,
+        width: width*170,
+        height: height*170,
     },
     id: {
         color: '#404040',
-        marginBottom: 20,
+        marginBottom: height*30,
     },
     nicknameEdit: {     // 닉네임 변경 뷰
 
     },
     TextForm: {
-        marginTop: 10,
-        paddingLeft: 20,
-        height: 45,
-        width: 290,
+        marginTop: height*10,
+        paddingLeft: width*20,
+        height: height*55,
+        width: width*340,
         backgroundColor: '#F0F0F0',
         fontSize: 17,
     },

@@ -6,6 +6,7 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
+import { colors, width, height } from './screen/globalStyles'; //width,height 받아오기
 
 export default class CustomButton extends Component{
     static defaultProps = {
@@ -39,9 +40,9 @@ export default class CustomButton extends Component{
     button: {
       alignItems: 'center',
       justifyContent: 'center',
-      width: 290,
-      height: 45,
-      marginBottom: 10,
+      height: height*55,
+      width: width*340,
+      marginBottom: width*10,
     },
     title: {
       fontSize: 17,

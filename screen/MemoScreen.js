@@ -48,10 +48,23 @@ export default function MemoMainScreen({ }) {
     const [isFocus, setIsFocus] = useState(false);
     const [folderId, setFolderId] = useState("");
     const apiUrlFolderAdd = "http://43.201.9.115:3000/create-folder";
-    const apiUrlFolderDelete ="http://43.201.9.115:3000/delete-folder";
+    const apiUrlFolderDelete = "http://43.201.9.115:3000/delete-folder";
 
     const menuRef = React.createRef();//Menu 컴포넌트의 ref, 빈공간 클릭시 메뉴 닫기를 위한
 
+    // BackButton 기능 구현
+    const handlePop = () => {
+        const previousScreen = navigation?.getState()?.routes[navigation?.getState()?.index - 1];
+
+        if (previousScreen) {
+            console.log('이전 스크린:', previousScreen.name);
+            // 이전 스크린에 대한 추가 정보를 필요하다면 previousScreen.params 등을 사용할 수 있습니다.
+
+            navigation.pop(); // 이전 스크린으로 돌아가는 함수 호출
+        } else {
+            console.log('현재 스크린이 root 스크린. 이전 스크린 없음');
+        }
+    };
 
     useEffect(() => {
         AsyncStorage.getItem('userId').then(userId => {
@@ -143,242 +156,248 @@ export default function MemoMainScreen({ }) {
         fetchData(userId, byCreate, byName);
     }
 
-    const folderDelete = async(folderId) => {
-        const requestDataFolderDelete={
-            folderId:folderId
+    const folderDelete = async (folderId) => {
+        const requestDataFolderDelete = {
+            folderId: folderId
         }
         console.log('삭제', folderId);
-        try{
+        try {
             const responseFolder = await axios.delete(apiUrlFolderDelete, requestDataFolderDelete);
             Alert.alert(responseFolder.data["message"]);
             console.log(responseFolder.data["message"]);
             fetchData(userId, byCreate, byName);
-    }
-    catch(err){
-        console.log(err)
-    }
+        }
+        catch (err) {
+            console.log(err)
+        }
 
     }
-    const folderEdit = (folderId)=>{
+    const folderEdit = (folderId) => {
         console.log('편집창')
     }
     const Divider = () => <View style={styles.divider} />; //메뉴 구분선
     return (
-
         <View style={styles.container}>
-            <DialogInput
-                isDialogVisible={dialogVisibleFolderAdd}
-                message={"추가하려는 폴더의 이름을 입력해주세요\n(=^･ω･^=)"}
-                dialogStyle={{ backgroundColor: 'white', borderRadius: 20 }}
-                textInputProps={{
-                    autoCorrect: false,
-                    autoCapitalize: false,
-                    maxLength: 10,
-                }}
-                title={"폴더 추가"}
-                hintInput={"폴더명 입력"}
-                initValueTextInput={""}
-                submitText={'추가'}
-                cancelText={'취소'}
-                submitInput={(inputText) => {
-                    if (inputText.trim() == " ")
-                        Alert.alert('', '공백은 닉네임으로 사용할 수 없습니다.');
-                    else
-                        folderAdd(inputText);
-                }}
-                closeDialog={() => { setDialogVisibleFolderAdd(false) }}
-            />
-            {/* 부가 기능 모달 */}
-            <Modal animationType="slide"
-                transparent={true}
-                visible={visibleModal}
-                // onBackdropPress={() => setVisibleModal(false)}
-                onBackdropPress={() => this.closeModal()}>
-                <View style={styles.constainerModelStyle}>
-                    <View style={styles.viewModalStyle}>
-                        {/*Modal 부가 기능 버튼 모음*/}
-                        <Button title='폴더 추가' color="black" onPress={() => folderAddAlert()}></Button>
-                        <View style={styles.subseperatorModal} />
-                        <Button title='메모 추가' color="black"></Button>
-                        <View style={styles.subseperatorModal} />
-                        <Button title='폴더 선택 삭제' color="black"></Button>
-                        <View style={styles.subseperatorModal} />
-                        <Button title='메모 선택 삭제' color="black"></Button>
-                        <View style={styles.subseperatorModal} />
-                        <Button title='메모 선택 이동' color="black"></Button>
-                        <View style={styles.subseperatorModalLast} />
-                        {/* Modal 다이얼로그 숨기기 */}
-                        <Button title='닫기' onPress={() => setVisibleModal(false)} />
+            <View style={styles.HeaderContainer}>
+                {/* 뒤로가기 버튼 */}
+                <TouchableOpacity onPress={handlePop}><Image style={styles.BackButton} source={require('../assets/icons/BackToPage.png')} /></TouchableOpacity>
+            </View>
+            {/* HeaderContainer view 끝 */}
+            <View style={styles.BodyContainer}>
+                <DialogInput
+                    isDialogVisible={dialogVisibleFolderAdd}
+                    message={"추가하려는 폴더의 이름을 입력해주세요\n(=^･ω･^=)"}
+                    dialogStyle={{ backgroundColor: 'white', borderRadius: 20 }}
+                    textInputProps={{
+                        autoCorrect: false,
+                        autoCapitalize: false,
+                        maxLength: 10,
+                    }}
+                    title={"폴더 추가"}
+                    hintInput={"폴더명 입력"}
+                    initValueTextInput={""}
+                    submitText={'추가'}
+                    cancelText={'취소'}
+                    submitInput={(inputText) => {
+                        if (inputText.trim() == " ")
+                            Alert.alert('', '공백은 닉네임으로 사용할 수 없습니다.');
+                        else
+                            folderAdd(inputText);
+                    }}
+                    closeDialog={() => { setDialogVisibleFolderAdd(false) }}
+                />
+                {/* 부가 기능 모달 */}
+                <Modal animationType="slide"
+                    transparent={true}
+                    visible={visibleModal}
+                    // onBackdropPress={() => setVisibleModal(false)}
+                    onBackdropPress={() => this.closeModal()}>
+                    <View style={styles.constainerModelStyle}>
+                        <View style={styles.viewModalStyle}>
+                            {/*Modal 부가 기능 버튼 모음*/}
+                            <Button title='폴더 추가' color="black" onPress={() => folderAddAlert()}></Button>
+                            <View style={styles.subseperatorModal} />
+                            <Button title='메모 추가' color="black"></Button>
+                            <View style={styles.subseperatorModal} />
+                            <Button title='폴더 선택 삭제' color="black"></Button>
+                            <View style={styles.subseperatorModal} />
+                            <Button title='메모 선택 삭제' color="black"></Button>
+                            <View style={styles.subseperatorModal} />
+                            <Button title='메모 선택 이동' color="black"></Button>
+                            <View style={styles.subseperatorModalLast} />
+                            {/* Modal 다이얼로그 숨기기 */}
+                            <Button title='닫기' onPress={() => setVisibleModal(false)} />
+                        </View>
+                    </View>
+                </Modal>
+
+                <View style={styles.titleArea}>
+                    <Text style={styles.title}>Memo</Text>
+                </View>
+                <View style={styles.folderListArea}>
+                    <ScrollView
+                        horizontal
+                        contentContainerStyle={{
+                            ...styles.scrollViewFolder,
+                            alignItems: 'flex-start',
+                            width: (folderList.length == 1 ? folderList.length * 390 * width : (folderList.length == 2 ? (folderList.length - 1) * 390 * width : folderList.length * 180 * width))
+                        }}
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {/*폴더 리스트*/}
+                        {folderList.map((folder, index) => (
+                            <TouchableOpacity
+                                style={styles.folderButton}
+                                onPress={() => moveToFolder(folder.folderId)}
+                                key={index}
+                            >
+                                <View style={styles.folderContainer}>
+                                    <View style={styles.folderTopArea}>
+                                        <View style={styles.folderTitleArea}>
+                                            <Image
+                                                style={styles.folderImage}
+                                                source={require('../assets/icons/memo/Memo_main_folderIcon.png')}
+                                            /><Text style={styles.folderTitle} numberOfLines={1}>{
+                                                folder.folderName}</Text>
+                                            {/* <TouchableOpacity style={styles.miniButton} onPress={() => folderSetting(folder.folderId)}> */}
+
+                                        </View>
+                                        <View style={styles.folderPopupMenuArea}>
+                                            <View style={styles.editButtonV}>
+                                            </View>
+                                            <MenuProvider style={{ width: 20 * width }}>
+                                                <Menu ref={menuRef}>
+                                                    <MenuTrigger>
+                                                        <Image
+                                                            style={styles.dotImage}
+                                                            resizeMode="cover"
+                                                            source={require('../assets/icons/ThreeDot.png')}>
+                                                        </Image>
+                                                    </MenuTrigger>
+                                                    <MenuOptions customStyles={{ optionsContainer: { borderRadius: width * 10, width: width * 40, borderColor: '#cccccc', borderWidth: 1, backgroundColor: '#ffffff', }, }}>
+                                                        <MenuOption text='편집' onSelect={() => folderEdit(folder.folderId)} />
+                                                        <Divider />
+                                                        <MenuOption text='삭제' onSelect={() => folderDelete(folder.folderId)} />
+                                                    </MenuOptions>
+                                                </Menu>
+                                            </MenuProvider>
+                                        </View>
+                                    </View>
+                                    <Text style={styles.folderInfo}>메모 {folder.memoCount}개</Text>
+                                </View>
+                            </TouchableOpacity>
+                        ))}
+                    </ScrollView>
+                </View>
+                <View style={styles.subseperator} />
+                <View style={styles.buttonSort}>
+                    <Dropdown
+                        style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+                        placeholderStyle={styles.placeholderStyle}
+                        selectedTextStyle={styles.selectedTextStyle}
+                        inputSearchStyle={styles.inputSearchStyle}
+                        iconStyle={styles.iconStyle}
+                        data={data}
+                        maxHeight={300}
+                        labelField="label"
+                        valueField="value"
+                        value={value}
+                        onFocus={() => setIsFocus(true)}
+                        onBlur={() => setIsFocus(false)}
+                        onChange={(selectedValue) => {
+                            let create = 0;
+                            let name = 0;
+                            if (selectedValue["label"] === "이름순") {
+                                create = 0;
+                                name = 1;
+                                setByName(1);
+                                setByCreate(0);
+                            }
+
+                            else if (selectedValue["label"] === "생성순") {
+                                create = 1;
+                                name = 0;
+                                setByName(0);
+                                setByCreate(1);
+                            }
+
+                            fetchData(userId, create, name);
+                            console.log(selectedValue);
+                            setValue(selectedValue);
+                        }}
+                    />
+                    <View style={styles.miniButtonArea}>
+                        <TouchableOpacity style={styles.miniButton} onPress={() => setVisibleModal(true)}>
+                            <Image style={styles.selectButton}
+                                source={require('../assets/icons/memo/Memo_main_sort.png')} />
+                        </TouchableOpacity>
                     </View>
                 </View>
-            </Modal>
+                <View style={styles.memoListArea}>
+                    <ScrollView
+                        vertical
+                        //memoList.length
+                        contentContainerStyle={{
+                            ...styles.scrollViewMemo,
+                            // height: memoListHeight,
+                            height: (memoList.length == 1 ? memoList.length * 115 * height : memoList.length * 115 * height)
+                        }}
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {/*메모 리스트*/}
+                        {memoList.map((memo, index) => (
+                            <TouchableOpacity
+                                style={styles.memoButton}
+                                onPress={() => moveToMemo(memo.memoId)}
+                                key={index}
+                            >
+                                <View style={styles.memoTitleArea}>
+                                    <Image
+                                        style={styles.memoImage}
+                                        source={require('../assets/icons/memo/Memo_main_folderIcon.png')}
+                                    /><Text style={styles.memoTitle}>{
+                                        memo.memoName}</Text>
+                                    <Image
+                                        style={styles.dotImage}
+                                        source={require('../assets/icons/ThreeDot.png')}
+                                    /></View>
+                                {/*Text 길이제한*/}
+                                <Text style={styles.memoInfo} numberOfLines={3}>{memo.content}</Text>
+                            </TouchableOpacity>
+                        ))}
 
-            <View style={styles.titleArea}>
-                <Text style={styles.title}>Memo</Text>
-            </View>
-            <View style={styles.folderListArea}>
-                <ScrollView
-                    horizontal
-                    contentContainerStyle={{
-                        ...styles.scrollViewFolder,
-                        alignItems: 'flex-start',
-                        width: (folderList.length == 1 ? folderList.length * 390 * width : (folderList.length == 2 ? (folderList.length - 1) * 390 * width : folderList.length * 180 * width))
-                    }}
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {/*폴더 리스트*/}
-                    {folderList.map((folder, index) => (
-                        <TouchableOpacity
-                            style={styles.folderButton}
-                            onPress={() => moveToFolder(folder.folderId)}
-                            key={index}
-                        >
-                            <View style={styles.folderContainer}>
-                                <View style={styles.folderTopArea}>
-                                    <View style={styles.folderTitleArea}>
-                                        <Image
-                                            style={styles.folderImage}
-                                            source={require('../assets/icons/memo/Memo_main_folderIcon.png')}
-                                        /><Text style={styles.folderTitle} numberOfLines={1}>{
-                                            folder.folderName}</Text>
-                                        {/* <TouchableOpacity style={styles.miniButton} onPress={() => folderSetting(folder.folderId)}> */}
-
-                                    </View>
-                                    <View style={styles.folderPopupMenuArea}>
-                                        <View style={styles.editButtonV}>
-                                        </View>
-                                        <MenuProvider style={{ width: 20 * width }}>
-                                            <Menu ref={menuRef}>
-                                                <MenuTrigger>
-                                                    <Image
-                                                        style={styles.dotImage}
-                                                        resizeMode="cover"
-                                                        source={require('../assets/icons/ThreeDot.png')}>
-                                                    </Image>
-                                                </MenuTrigger>
-                                                <MenuOptions customStyles={{ optionsContainer: { borderRadius: width * 10, width: width * 40, borderColor : '#cccccc', borderWidth : 1, backgroundColor : '#ffffff', }, }}>
-                                                    <MenuOption text='편집' onSelect={() => folderEdit(folder.folderId)} />
-                                                    <Divider />
-                                                    <MenuOption text='삭제' onSelect={() => folderDelete(folder.folderId)} />
-                                                </MenuOptions>
-                                            </Menu>
-                                        </MenuProvider>
-                                    </View>
-                                </View>
-                                <Text style={styles.folderInfo}>메모 {folder.memoCount}개</Text>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
-            </View>
-            <View style={styles.subseperator} />
-            <View style={styles.buttonSort}>
-                <Dropdown
-                    style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
-                    placeholderStyle={styles.placeholderStyle}
-                    selectedTextStyle={styles.selectedTextStyle}
-                    inputSearchStyle={styles.inputSearchStyle}
-                    iconStyle={styles.iconStyle}
-                    data={data}
-                    maxHeight={300}
-                    labelField="label"
-                    valueField="value"
-                    value={value}
-                    onFocus={() => setIsFocus(true)}
-                    onBlur={() => setIsFocus(false)}
-                    onChange={(selectedValue) => {
-                        let create = 0;
-                        let name = 0;
-                        if (selectedValue["label"] === "이름순") {
-                            create = 0;
-                            name = 1;
-                            setByName(1);
-                            setByCreate(0);
-                        }
-
-                        else if (selectedValue["label"] === "생성순") {
-                            create = 1;
-                            name = 0;
-                            setByName(0);
-                            setByCreate(1);
-                        }
-
-                        fetchData(userId, create, name);
-                        console.log(selectedValue);
-                        setValue(selectedValue);
-                    }}
-                />
-                <View style={styles.miniButtonArea}>
-                    <TouchableOpacity style={styles.miniButton} onPress={() => setVisibleModal(true)}>
-                        <Image style={styles.selectButton}
-                            source={require('../assets/icons/memo/Memo_main_sort.png')} />
+                    </ScrollView>
+                </View>
+                <View style={styles.iconButton}>
+                    {/** 메인 페이지 (일정) 이동 버튼 */}
+                    <TouchableOpacity
+                        style={styles.buttonIcon}
+                        onPress={() => navigation.navigate('Main')}>
+                        <Image style={styles.IconImage}
+                            source={require('../assets/icons/Calendar_icon.png')} />
+                    </TouchableOpacity>
+                    {/** To-do 리스트 페이지 이동 버튼 */}
+                    <TouchableOpacity
+                        style={styles.buttonIcon}
+                        onPress={() => navigation.navigate('Splash')}>
+                        <Image style={styles.IconImage}
+                            source={require('../assets/icons/Todo_icon.png')} />
+                    </TouchableOpacity>
+                    {/** 메모 페이지 이동 버튼 */}
+                    <TouchableOpacity
+                        style={styles.buttonIcon}
+                        onPress={() => navigation.navigate('Memo')}>
+                        <Image style={styles.IconImage}
+                            source={require('../assets/icons/Memo_icon.png')} />
+                    </TouchableOpacity>
+                    {/** 마이페이지 이동 버튼 */}
+                    <TouchableOpacity
+                        style={styles.buttonIcon}
+                        onPress={() => navigation.navigate('MyPage')}>
+                        <Image style={styles.IconImage}
+                            source={require('../assets/icons/MyPage_icon.png')} />
                     </TouchableOpacity>
                 </View>
-            </View>
-            <View style={styles.memoListArea}>
-                <ScrollView
-                    vertical
-                    //memoList.length
-                    contentContainerStyle={{
-                        ...styles.scrollViewMemo,
-                        // height: memoListHeight,
-                        height: (memoList.length == 1 ? memoList.length * 115 * height : memoList.length * 115 * height)
-                    }}
-                    showsHorizontalScrollIndicator={false}
-                >
-                    {/*메모 리스트*/}
-                    {memoList.map((memo, index) => (
-                        <TouchableOpacity
-                            style={styles.memoButton}
-                            onPress={() => moveToMemo(memo.memoId)}
-                            key={index}
-                        >
-                            <View style={styles.memoTitleArea}>
-                                <Image
-                                    style={styles.memoImage}
-                                    source={require('../assets/icons/memo/Memo_main_folderIcon.png')}
-                                /><Text style={styles.memoTitle}>{
-                                    memo.memoName}</Text>
-                                <Image
-                                    style={styles.dotImage}
-                                    source={require('../assets/icons/ThreeDot.png')}
-                                /></View>
-                            {/*Text 길이제한*/}
-                            <Text style={styles.memoInfo} numberOfLines={3}>{memo.content}</Text>
-                        </TouchableOpacity>
-                    ))}
-
-                </ScrollView>
-            </View>
-            <View style={styles.iconButton}>
-                {/** 메인 페이지 (일정) 이동 버튼 */}
-                <TouchableOpacity
-                    style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('Main')}>
-                    <Image style={styles.IconImage}
-                        source={require('../assets/icons/Calendar_icon.png')} />
-                </TouchableOpacity>
-                {/** To-do 리스트 페이지 이동 버튼 */}
-                <TouchableOpacity
-                    style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('Splash')}>
-                    <Image style={styles.IconImage}
-                        source={require('../assets/icons/Todo_icon.png')} />
-                </TouchableOpacity>
-                {/** To-do 리스트 페이지 이동 버튼 */}
-                <TouchableOpacity
-                    style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('Memo')}>
-                    <Image style={styles.IconImage}
-                        source={require('../assets/icons/Memo_icon.png')} />
-                </TouchableOpacity>
-                {/** 마이페이지 이동 버튼 */}
-                <TouchableOpacity
-                    style={styles.buttonIcon}
-                    onPress={() => navigation.navigate('MyPage')}>
-                    <Image style={styles.IconImage}
-                        source={require('../assets/icons/MyPage_icon.png')} />
-                </TouchableOpacity>
             </View>
         </View>
     );
@@ -408,8 +427,23 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        padding: width * 20,
     },
+    BackButton: {      // 뒤로가기 버튼 스타일
+        marginTop: height * 60,
+        marginLeft: width * 10,
+        height: height * 30,
+        width: width * 30,
+    },
+    HeaderContainer: { // header 컨테이너 (뒤로가기 버튼)
+        flex: 1,
+        // backgroundColor: 'red', // 컨테이너 확인용
+    },
+    BodyContainer: { // body 컨테이너 (주 내용)
+        flex: 9,
+        padding: width * 20,
+        // backgroundColor: 'blue', // 컨테이너 확인용
+    },
+
     titleArea: {
         alignItems: 'center',
         backgroundColor: "white",
@@ -590,15 +624,15 @@ const styles = StyleSheet.create({
     buttonIcon: {
 
     },
-    iconButton: {
+    iconButton: { // 하단 아이콘 버튼 4개
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    IconImage: {
-        width: width * 55,
-        height: height * 55,
-        margin: width * 12,
+    IconImage: { // 하단 아이콘 버튼 4개 개별
+        width: width * 65,
+        height: height * 65,
+        margin: width * 15,
     },
     dropdown: {
         height: height * 70,

@@ -29,29 +29,30 @@ const Stack = createNativeStackNavigator();
 
 const StackNavigator = () => {
     return(
-        <Stack.Navigator>
-            <Stack.Screen name="Splash" component={SplashScreen}/>
-            <Stack.Screen name="SignUp" component={SignUpScreen}/>
-            <Stack.Screen name="Login" component={LoginScreen}/>
-            <Stack.Screen name="Main" component={MainScreen}/>
-            <Stack.Screen name="MyPage" component={MyPageScreen}/>
-            <Stack.Screen name="ProfileEdit" component={ProfileEditScreen}/>
-            <Stack.Screen name="CheckPassword" component={CheckPasswordScreen}/>
-            <Stack.Screen name="Notice" component={NoticeScreen}/>
-            <Stack.Screen name="Notice1" component={Notice1Screen}/>
-            <Stack.Screen name="Notice2" component={Notice2Screen}/>
-            <Stack.Screen name="Notice3" component={Notice3Screen}/>
-            <Stack.Screen name="Notice4" component={Notice4Screen}/>
-            <Stack.Screen name="FAQ" component={FAQScreen}/>
-            <Stack.Screen name="FAQ1" component={FAQ1Screen}/>
-            <Stack.Screen name="FAQ2" component={FAQ2Screen}/>
-            <Stack.Screen name="FAQ3" component={FAQ3Screen}/>
-            <Stack.Screen name="FAQ4" component={FAQ4Screen}/>
-            <Stack.Screen name="Suggestion" component={SuggestionScreen}/>
-            <Stack.Screen name="DaySchedule" component={DayScheduleScreen}/>
-            <Stack.Screen name="Memo" component={MemoScreen}/>
-            <Stack.Screen name="MemoFolder" component={MemoFolder}/>
-            <Stack.Screen name="MemoFile" component={MemoFile}/>
+        <Stack.Navigator
+        >
+            <Stack.Screen name="Splash" component={SplashScreen} options={{headerShown: false }}/>
+            <Stack.Screen name="SignUp" component={SignUpScreen} options={{headerShown: false }}/>
+            <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false }}/>
+            <Stack.Screen name="Main" component={MainScreen} options={{headerShown: false }}/>
+            <Stack.Screen name="MyPage" component={MyPageScreen} options={{headerShown: false }}/>
+            <Stack.Screen name="ProfileEdit" component={ProfileEditScreen} options={{headerShown: false }}/>
+            <Stack.Screen name="CheckPassword" component={CheckPasswordScreen} options={{headerShown: false }}/>
+            <Stack.Screen name="Notice" component={NoticeScreen} options={{headerShown: false }}/>
+                <Stack.Screen name="Notice1" component={Notice1Screen} options={{headerShown: false }}/>
+                <Stack.Screen name="Notice2" component={Notice2Screen} options={{headerShown: false }}/>
+                <Stack.Screen name="Notice3" component={Notice3Screen} options={{headerShown: false }}/>
+                <Stack.Screen name="Notice4" component={Notice4Screen} options={{headerShown: false }}/>
+            <Stack.Screen name="FAQ" component={FAQScreen} options={{headerShown: false }}/>
+                <Stack.Screen name="FAQ1" component={FAQ1Screen} options={{headerShown: false }}/>
+                <Stack.Screen name="FAQ2" component={FAQ2Screen} options={{headerShown: false }}/>
+                <Stack.Screen name="FAQ3" component={FAQ3Screen} options={{headerShown: false }}/>
+                <Stack.Screen name="FAQ4" component={FAQ4Screen} options={{headerShown: false }}/>
+            <Stack.Screen name="Suggestion" component={SuggestionScreen} options={{headerShown: false }}/>
+            <Stack.Screen name="DaySchedule" component={DayScheduleScreen} options={{headerShown: false }}/>
+            <Stack.Screen name="Memo" component={MemoScreen} options={{headerShown: false }}/>
+            <Stack.Screen name="MemoFolder" component={MemoFolder} options={{headerShown: false }}/>
+            <Stack.Screen name="MemoFile" component={MemoFile} options={{headerShown: false }}/>
         </Stack.Navigator>
         // Stack.Navigator.StackScreen을 통해서 네비게이션 등록
     )
