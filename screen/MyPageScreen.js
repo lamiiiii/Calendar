@@ -264,8 +264,45 @@ const MyPageScreen = () => {
                         </View>
                         <View style={styles.subseperator} />
                     </View>
+                    {/* accountArea View 끝 */}
                 </View>
+                {/* ContentArea View 끝 */}
+
+                {/** 아이콘 버튼 4개 */}
+                <View style={styles.iconButton}>
+                    {/** 메인 페이지 (일정) 이동 버튼 */}
+                    <TouchableOpacity
+                        style={styles.buttonIcon}
+                        onPress={() => navigation.navigate('Main')}>
+                        <Image style={styles.IconImage}
+                            source={require('../assets/icons/Calendar_icon.png')} />
+                    </TouchableOpacity>
+                    {/** To-do 리스트 페이지 이동 버튼 */}
+                    <TouchableOpacity
+                        style={styles.buttonIcon}
+                        onPress={() => navigation.navigate('Splash')}>
+                        <Image style={styles.IconImage}
+                            source={require('../assets/icons/Todo_icon.png')} />
+                    </TouchableOpacity>
+                    {/** 메모 페이지 이동 버튼 */}
+                    <TouchableOpacity
+                        style={styles.buttonIcon}
+                        onPress={() => navigation.navigate('Memo')}>
+                        <Image style={styles.IconImage}
+                            source={require('../assets/icons/Memo_icon.png')} />
+                    </TouchableOpacity>
+                    {/** 마이페이지 이동 버튼 */}
+                    <TouchableOpacity
+                        style={styles.buttonIcon}
+                        onPress={() => navigation.navigate('MyPage')}>
+                        <Image style={styles.SelectedIconImage}
+                            source={require('../assets/icons/MyPage_icon.png')} />
+                    </TouchableOpacity>
+                </View>
+                {/* IconButton View 끝 */}
+
             </View>
+            {/* BodyContainer View 끝 */}
         </View>
     )
 }
@@ -276,24 +313,24 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     seperator: {            // 구분자
-        height: height*1,
+        height: height * 1,
         backgroundColor: 'black',
         marginTop: 15,
         marginBottom: 15,
-        margin: width*30,
+        margin: width * 30,
     },
     subseperator: {         // 서브 구분자
-        height: height*1,
+        height: height * 1,
         backgroundColor: '#DADADA',
         marginTop: 12,
-        marginBottom: 5,
-        margin: width*35,
+        marginBottom: 15,
+        margin: width * 35,
     },
     BackButton: {      // 뒤로가기 버튼 스타일
-        marginTop: height*60,
-        marginLeft: width*10,
-        height: height*30,
-        width: width*30,
+        marginTop: height * 60,
+        marginLeft: width * 10,
+        height: height * 30,
+        width: width * 30,
     },
     HeaderContainer: { // header 컨테이너 (뒤로가기 버튼)
         flex: 1,
@@ -310,33 +347,33 @@ const styles = StyleSheet.create({
         fontSize: 40,
         fontWeight: 'bold',
         color: '#404040',
-        margin: width*30,
+        margin: width * 15,
     },
     mainArea: {                        // 프로필 부분
         flexDirection: 'row',
         alignItems: 'center',
     },
     profileImage: {     // 프로필 이미지 
-        marginLeft: width*50,
-        width: width*90,
-        height: height*90,
+        marginLeft: width * 50,
+        width: width * 90,
+        height: height * 90,
     },
     myNickname: {       // 닉네임 텍스트
-        marginLeft: width*35,
-        marginTop: height*15,
+        marginLeft: width * 35,
+        marginTop: height * 15,
         fontSize: 25,
     },
     contentArea: {},                      // 설정 선택 부분
     settingArea: {},                   // 환경 설정 부분
     helpArea: {},                      // 도움말 부분
     accountArea: {},                   // 계정 부분
-    subtitle: {
+    subtitle: { // 소제목 스타일
         color: '#575757',
         fontWeight: 'bold',
         fontSize: 12,
-        marginLeft: width*37,
-        marginTop: height*30,
-        marginBottom: height*20,
+        marginLeft: width * 37,
+        marginTop: height * 15,
+        marginBottom: height * 10,
     },
     buttonArea: {
         width: '100%',
@@ -345,12 +382,30 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         justifyContent: 'center',
     },
-    buttonTitle: {
-        marginLeft: width*40,
-        marginBottom: height*5,
+    buttonTitle: { // 메뉴 제목 스타일
+        marginLeft: width * 40,
+        marginBottom: height * 0,
         fontSize: 20,
         color: '#404040',
-    }
+    },
+    iconButton: { // 하단 아이콘 버튼 4개
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    IconImage: { // 하단 아이콘 버튼 4개 개별
+        width: width * 65,
+        height: height * 65,
+        margin: width * 15,
+        marginTop: 0,
+        opacity: 0.4, // 투명도 조절을 위한 값 (0.5는 반투명)
+    },
+    SelectedIconImage: { // 하단 아이콘 버튼 4개 개별
+        width: width * 65,
+        height: height * 65,
+        margin: width * 15,
+        marginTop: 0,
+    },
 })
 
 export default MyPageScreen

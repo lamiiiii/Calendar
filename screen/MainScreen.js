@@ -47,11 +47,12 @@ const MainScreen = () => {
                     <Text style={styles.titleText}>Calendar</Text>
                 </View>
                 {/* <View style={styles.addButton}>
-        <TouchableOpacity 
-            onPress={() => navigation.navigate('DaySchedule')}>
-                <Image source={require('../assets/icons/AddButton.png')} style={styles.addIconImage}/>
-        </TouchableOpacity>
-        </View> */}
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('DaySchedule')}>
+                        <Image source={require('../assets/icons/AddButton.png')} style={styles.addIconImage} />
+                    </TouchableOpacity>
+                </View> */}
+
                 <View style={styles.calendarContainer}>
                     <Calendar style={styles.calendar} />
                 </View>
@@ -62,7 +63,7 @@ const MainScreen = () => {
                     <TouchableOpacity
                         style={styles.buttonIcon}
                         onPress={() => navigation.navigate('Main')}>
-                        <Image style={styles.IconImage}
+                        <Image style={styles.SelectedIconImage}
                             source={require('../assets/icons/Calendar_icon.png')} />
                     </TouchableOpacity>
                     {/** To-do 리스트 페이지 이동 버튼 */}
@@ -87,7 +88,9 @@ const MainScreen = () => {
                             source={require('../assets/icons/MyPage_icon.png')} />
                     </TouchableOpacity>
                 </View>
+                {/* IconButton View 끝 */}
             </View>
+            {/* BodyContainder View 끝 */}
         </View>
     )
 }
@@ -106,8 +109,8 @@ const styles = StyleSheet.create({
         marginRight: 20,
     },
     addIconImage: {
-        height: height*25,
-        width: width*25,
+        height: height * 25,
+        width: width * 25,
     },
     calendarContainer: {
         backgroundColor: 'white', // white임
@@ -118,10 +121,10 @@ const styles = StyleSheet.create({
         backgroundColor: 'white', // white임
     },
     BackButton: {      // 뒤로가기 버튼 스타일
-        marginTop: height*60,
-        marginLeft: width*10,
-        height: height*30,
-        width: width*30,
+        marginTop: height * 60,
+        marginLeft: width * 10,
+        height: height * 30,
+        width: width * 30,
     },
     HeaderContainer: { // header 컨테이너 (뒤로가기 버튼)
         flex: 1,
@@ -136,7 +139,7 @@ const styles = StyleSheet.create({
     titleArea: {
         // alignItems: 'center',
         backgroundColor: 'white',
-        marginBottom: height*20
+        marginBottom: height * 20
     },
     titleText: {
         fontSize: 35,
@@ -157,7 +160,14 @@ const styles = StyleSheet.create({
     IconImage: { // 하단 아이콘 버튼 4개 개별
         width: width * 65,
         height: height * 65,
-        margin: width *15,
+        margin: width * 15,
+        marginTop: 0,
+        opacity: 0.4, // 투명도 조절을 위한 값 (0.5는 반투명)
+    },
+    SelectedIconImage: { // 하단 아이콘 버튼 4개 개별
+        width: width * 65,
+        height: height * 65,
+        margin: width * 15,
         marginTop: 0,
     },
 })

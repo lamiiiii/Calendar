@@ -391,7 +391,7 @@ export default function MemoMainScreen({ }) {
                     <TouchableOpacity
                         style={styles.buttonIcon}
                         onPress={() => navigation.navigate('Memo')}>
-                        <Image style={styles.IconImage}
+                        <Image style={styles.SelectedIconImage}
                             source={require('../assets/icons/Memo_icon.png')} />
                     </TouchableOpacity>
                     {/** 마이페이지 이동 버튼 */}
@@ -402,7 +402,9 @@ export default function MemoMainScreen({ }) {
                             source={require('../assets/icons/MyPage_icon.png')} />
                     </TouchableOpacity>
                 </View>
+                {/* iconButton View 끝 */}
             </View>
+             {/* BodyContainer View 끝 */}
         </View>
     );
 }
@@ -637,6 +639,12 @@ const styles = StyleSheet.create({
         width: width * 65,
         height: height * 65,
         margin: width * 15,
+        opacity: 0.6, // 투명도 조절을 위한 값 (0.5는 반투명)
+    },
+    SelectedIconImage: { // 하단 아이콘 버튼 4개 개별
+        width: width * 65,
+        height: height * 65,
+        margin: width *15,
     },
     dropdown: {
         height: height * 70,

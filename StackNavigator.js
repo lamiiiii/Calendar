@@ -51,8 +51,8 @@ const StackNavigator = () => {
             <Stack.Screen name="Suggestion" component={SuggestionScreen} options={{headerShown: false }}/>
             <Stack.Screen name="DaySchedule" component={DayScheduleScreen} options={{headerShown: false }}/>
             <Stack.Screen name="Memo" component={MemoScreen} options={{headerShown: false }}/>
-            <Stack.Screen name="MemoFolder" component={MemoFolder} options={{headerShown: false }}/>
-            <Stack.Screen name="MemoFile" component={MemoFile} options={{headerShown: false }}/>
+                <Stack.Screen name="MemoFolder" component={MemoFolder} options={{headerShown: false }}/>
+                <Stack.Screen name="MemoFile" component={MemoFile} options={{headerShown: false }}/>
         </Stack.Navigator>
         // Stack.Navigator.StackScreen을 통해서 네비게이션 등록
     )

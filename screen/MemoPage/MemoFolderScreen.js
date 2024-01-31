@@ -223,7 +223,9 @@ export default function MemoFolderScreen({ }) {
                             source={require('../../assets/icons/MyPage_icon.png')} />
                     </TouchableOpacity>
                 </View>
+                {/* iconButton View 끝 */}
             </View>
+             {/* BodyContainer View 끝 */}
         </View>
     );
 }

@@ -55,6 +55,8 @@ const SplashScreen = () => {
                 <Button title='Go to DayScheduleScreen' onPress={() => navigation.navigate('DaySchedule')} />
                 <Text></Text>
                 <Button title='Go to MemoScreen' onPress={() => navigation.navigate('Memo')} />
+                <Text></Text>
+                <Button title='Go to MemoFileScreen' onPress={() => navigation.navigate('MemoFile')} />
                 {/** onPress는 버튼을 누르는 행위의 함수
              *   화면 전환을 위해 useNavigation() 객체 받아서 사용
              *   이를 받은 객체를 Navigation이라 만들었고, 이 객체의 navigate() 함수에 Stack으로 정한 이름 넣어줌
