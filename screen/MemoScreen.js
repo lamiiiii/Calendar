@@ -157,12 +157,16 @@ export default function MemoMainScreen({ }) {
     }
 
     const folderDelete = async (folderId) => {
-        const requestDataFolderDelete = {
-            folderId: folderId
-        }
+        // const requestDataFolderDelete = {
+        //     folderId:7,
+        // };
         console.log('삭제', folderId);
         try {
-            const responseFolder = await axios.delete(apiUrlFolderDelete, requestDataFolderDelete);
+            const responseFolder = await axios.delete(apiUrlFolderDelete, {
+                data: {
+                    folderId:folderId,
+                }});
+                //왜인지 모르겠는데 보내는 데이터 값을 따로 해주면 안되고 안에 선언해줘야 삭제됨.
             Alert.alert(responseFolder.data["message"]);
             console.log(responseFolder.data["message"]);
             fetchData(userId, byCreate, byName);
